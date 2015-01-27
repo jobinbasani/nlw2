@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nlwDateSize">90dp</dimen>
+    <dimen name="nlwPadding">9dp</dimen>
+    <dimen name="nlwCircleRadius">140dp</dimen>
+    <dimen name="nlwTopMargin">15dp</dimen>
+    <dimen name="detailsSmallBlockWidth">50dp</dimen>
+    <dimen name="detailLeftPadding">10dp</dimen>
+
+</resources>
