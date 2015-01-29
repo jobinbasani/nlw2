@@ -3,10 +3,14 @@ package com.jobinbasani.nlw;
 import java.util.List;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.jobinbasani.nlw.sql.NlwDataContract;
 import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
 import com.jobinbasani.nlw.sql.NlwDataDbHelper;
 import com.jobinbasani.nlw.util.NlwUtil;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,7 +31,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	SharedPreferences prefs;
 	final public static String COUNTRY_KEY = "country";
@@ -43,14 +47,12 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		NLW_CONTEXT = this;
-		
+        launchTasks();
+		getLoaderManager().initLoader(1,null,this);
+
 		prefs = getPreferences(MODE_PRIVATE);
 		int dbVersion = prefs.getInt(DB_VERSION_KEY, 0);
-		if(dbVersion == NlwDataDbHelper.DATABASE_VERSION){
-			launchTasks();
-		}else{
-			new DatabaseLoaderTask().execute();
-		}
+
 		
 	}
 
@@ -98,7 +100,7 @@ public class MainActivity extends Activity {
 	private void checkLastLoaded(){
 		int lastDate = prefs.getInt(LAST_CHECKED, 0);
 		if(lastDate>0 && (lastDate!=NlwUtil.getCurrentDateNumber())){
-			loadNextLongWeekend();
+			//loadNextLongWeekend();
 		}
 	}
 	
@@ -107,7 +109,7 @@ public class MainActivity extends Activity {
 		Spinner countrySpinner = (Spinner) findViewById(R.id.countrySelector);
 		SpinnerAdapter countryArray = countrySpinner.getAdapter();
 		if(defaultCountry.equals(countrySpinner.getSelectedItem().toString())){
-			loadNextLongWeekend();
+			//loadNextLongWeekend();
 		}
 		int position = -1;
 		for(int i=0;i<countryArray.getCount();i++){
@@ -184,7 +186,7 @@ public class MainActivity extends Activity {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(COUNTRY_KEY, countrySpinner.getSelectedItem().toString());
 				editor.commit();
-				loadNextLongWeekend();
+				//loadNextLongWeekend();
 			}
 
 			@Override
@@ -200,28 +202,20 @@ public class MainActivity extends Activity {
 		loadPreferences();
 	}
 	
-	private void loadNextLongWeekend() {
+	private void loadNextLongWeekend(Cursor data) {
 		
 		TextView monthYearText = (TextView) findViewById(R.id.monthYearText);
 		TextView holidayText = (TextView) findViewById(R.id.nlwHolidayText);
 		TextView nlwDateText = (TextView) findViewById(R.id.nlwDateText);
 		TextView holidayDetails = (TextView) findViewById(R.id.holidayDetails);
 		TextView daysToGoText = (TextView) findViewById(R.id.daysToGo);
-		Spinner countrySelector = (Spinner) findViewById(R.id.countrySelector);
 		int currentDateNumber = NlwUtil.getCurrentDateNumber();
-		String selectedCountry = countrySelector.getSelectedItem().toString();
-		String[] selectionArgs = new String[]{currentDateNumber+"", selectedCountry};
-		
-		NlwDataDbHelper nlwDbHelper = new NlwDataDbHelper(NLW_CONTEXT);
-		SQLiteDatabase db = nlwDbHelper.getWritableDatabase();
-		
-		Cursor cursor = db.rawQuery("SELECT * FROM "+NlwDataEntry.TABLE_NAME+" WHERE "+NlwDataEntry.COLUMN_NAME_NLWDATE+">? AND "+NlwDataEntry.COLUMN_NAME_NLWCOUNTRY+"=? ORDER BY _ID LIMIT 1", selectionArgs);
-		cursor.moveToFirst();
-		if(cursor.getCount()>0){
-			nlwDateNumber = cursor.getInt(cursor.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWDATE));
-			readMoreLink = cursor.getString(cursor.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWWIKI));
-			String holiday = cursor.getString(cursor.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWNAME));
-			String holidayDetailText = cursor.getString(cursor.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWTEXT));
+
+		if(data.getCount()>0){
+			nlwDateNumber = data.getInt(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWDATE));
+			readMoreLink = data.getString(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWWIKI));
+			String holiday = data.getString(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWNAME));
+			String holidayDetailText = data.getString(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWTEXT));
 			int year = nlwDateNumber/10000;
 			int month = (nlwDateNumber-(year*10000))/100;
 			int date = nlwDateNumber-(year*10000)-(month*100);
@@ -244,11 +238,29 @@ public class MainActivity extends Activity {
 			editor.commit();
 			
 		}
-		cursor.close();
-		db.close();
 	}
-	
-	private class DatabaseLoaderTask extends AsyncTask<Void, Void, Void>{
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Spinner countrySelector = (Spinner) findViewById(R.id.countrySelector);
+        String selectedCountry = countrySelector.getSelectedItem().toString();
+        String[] selectionArgs = new String[]{NlwUtil.getCurrentDateNumber()+"", selectedCountry};
+        return new CursorLoader(MainActivity.this, NlwDataContract.CONTENT_URI_NLW,null,null,selectionArgs,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(data!=null){
+            loadNextLongWeekend(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    private class DatabaseLoaderTask extends AsyncTask<Void, Void, Void>{
 		
 		private ProgressDialog pDialog;
 

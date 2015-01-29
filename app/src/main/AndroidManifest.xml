@@ -35,6 +35,11 @@
             android:name="com.jobinbasani.nlw.ReadMoreActivity"
             android:label="@string/title_activity_read_more" >
         </activity>
+        
+        <provider
+            android:authorities="@string/NlwProvider"
+            android:name=".provider.NlwProvider" android:exported="false" />
+
     </application>
 
 </manifest>
