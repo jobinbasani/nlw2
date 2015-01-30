@@ -1,14 +1,18 @@
 package com.jobinbasani.nlw;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.jobinbasani.nlw.generators.CanadaNlwGenerator;
+import com.jobinbasani.nlw.generators.NlwGeneratorI;
 import com.jobinbasani.nlw.sql.NlwDataContract;
 import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
 import com.jobinbasani.nlw.sql.NlwDataDbHelper;
 import com.jobinbasani.nlw.util.NlwUtil;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.net.Uri;
@@ -31,6 +35,10 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.MutableDateTime;
+
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	SharedPreferences prefs;
@@ -46,15 +54,31 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+        prefs = getPreferences(MODE_PRIVATE);
+        int dbVersion = prefs.getInt(DB_VERSION_KEY, 0);
 		NLW_CONTEXT = this;
         launchTasks();
 		getLoaderManager().initLoader(1,null,this);
 
-		prefs = getPreferences(MODE_PRIVATE);
-		int dbVersion = prefs.getInt(DB_VERSION_KEY, 0);
 
-		
-	}
+        NlwGeneratorI gen = new CanadaNlwGenerator(this);
+        DateTime start = new DateTime();
+        DateTime end = start.plusYears(1);
+        List<ContentValues> ls = new ArrayList<>();
+        gen.fillLongWeekends(ls,start,end);
+        System.out.println(ls);
+
+        MutableDateTime dt = new MutableDateTime();
+        dt.setYear(2017);
+        dt.setMonthOfYear(DateTimeConstants.FEBRUARY);
+        dt.setDayOfMonth(1);
+        if(dt.getDayOfWeek()!=1){
+            dt.addDays(8-dt.getDayOfWeek());
+        }
+        dt.addWeeks(2);
+        System.out.println(dt.toString("dd MMM yyyy"));
+
+    }
 
 	@Override
 	protected void onStart() {
@@ -210,7 +234,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 		TextView holidayDetails = (TextView) findViewById(R.id.holidayDetails);
 		TextView daysToGoText = (TextView) findViewById(R.id.daysToGo);
 		int currentDateNumber = NlwUtil.getCurrentDateNumber();
-
+        data.moveToFirst();
 		if(data.getCount()>0){
 			nlwDateNumber = data.getInt(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWDATE));
 			readMoreLink = data.getString(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWWIKI));

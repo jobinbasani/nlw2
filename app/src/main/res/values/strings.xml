@@ -14,6 +14,36 @@
     <string name="dottedLineDescr">Dotted Line</string>
     <string name="NlwProvider">com.jobinbasani.nlw.provider</string>
 
+    <string-array name="christmas">
+        <item>Christmas Day</item>
+        <item>http://en.wikipedia.org/wiki/Christmas</item>
+        <item>Annual commemoration of the birth of Jesus Christ</item>
+    </string-array>
+
+    <string-array name="familyDay">
+        <item>Family Day</item>
+        <item>http://en.wikipedia.org/wiki/Family_Day_(Canada)</item>
+        <item>Also called Louis Riel Day (Manitoba), Islander Day (PEI), Nova Scotia Heritage Day (Nova Scotia)</item>
+    </string-array>
+
+    <string-array name="familyDayBC">
+        <item>Family Day(BC)</item>
+        <item>http://en.wikipedia.org/wiki/Family_Day_(Canada)</item>
+        <item>A statutory holiday occurring on second Monday in February observed in BC</item>
+    </string-array>
+
+    <string-array name="goodFriday">
+        <item>Good Friday</item>
+        <item>http://en.wikipedia.org/wiki/Good_Friday</item>
+        <item>Good Friday is a religious holiday, observed primarily by Christians, commemorating the crucifixion of Jesus Christ and his death at Calvary.</item>
+    </string-array>
+
+    <string-array name="easterMondayCanada">
+        <item>Easter Monday</item>
+        <item>http://en.wikipedia.org/wiki/Easter_Monday</item>
+        <item>Easter Monday is the day after Easter Sunday and is celebrated as a holiday in some largely Christian cultures, especially Catholic and Eastern Christian cultures. Observed in Quebec.</item>
+    </string-array>
+
     <string-array name="nlwData">
         <item>150209~Canada~Family Day~http://en.wikipedia.org/wiki/Family_Day_(Canada)~A statutory holiday occurring on a Monday in February. Observed in Alberta, Ontario, PEI and Saskatchewan.</item>
         <item>150403~Canada~Good Friday~http://en.wikipedia.org/wiki/Good_Friday~Good Friday is a religious holiday, observed primarily by Christians, commemorating the crucifixion of Jesus Christ and his death at Calvary.</item>

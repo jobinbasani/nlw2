@@ -18,3 +18,5 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep class org.joda.time.** { *; }
+-dontwarn org.joda.time.**
