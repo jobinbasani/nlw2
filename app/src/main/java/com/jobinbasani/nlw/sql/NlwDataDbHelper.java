@@ -17,7 +17,7 @@ import java.util.List;
 public class NlwDataDbHelper extends SQLiteOpenHelper {
 	
 	private Context context;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "NlwData.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";

@@ -2,6 +2,15 @@
 <resources>
 
     <string name="app_name">Next Long Weekend</string>
+    <string name="dateFormat">yyyyMMdd</string>
+    <string name="nlwText">Next Long Weekend in</string>
+    <string name="dottedLineDescr">Dotted Line</string>
+    <string name="NlwProvider">com.jobinbasani.nlw.provider</string>
+
+    <plurals name="daysRemaining">
+        <item quantity="one">%d day to go!</item>
+        <item quantity="other">%d days to go!</item>
+    </plurals>
 
     <string-array name="countryArray">
         <item>Australia</item>
@@ -9,10 +18,6 @@
         <item>UK</item>
         <item>USA</item>
     </string-array>
-
-    <string name="nlwText">Next Long Weekend in</string>
-    <string name="dottedLineDescr">Dotted Line</string>
-    <string name="NlwProvider">com.jobinbasani.nlw.provider</string>
 
     <string-array name="christmas">
         <item>Christmas Day</item>

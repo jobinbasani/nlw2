@@ -30,7 +30,10 @@ import com.jobinbasani.nlw.util.NlwUtil;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.Days;
 import org.joda.time.MutableDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +43,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	SharedPreferences prefs;
 	final public static String COUNTRY_KEY = "country";
 	final public static String LAST_CHECKED = "lastChecked";
-	public static Context NLW_CONTEXT;
 	private int nlwDateNumber;
 	private String readMoreLink;
 	private ShareActionProvider mShareActionProvider;
@@ -51,7 +53,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
         prefs = getPreferences(MODE_PRIVATE);
-		NLW_CONTEXT = this;
         launchTasks();
 
         NlwGeneratorI gen = new CanadaNlwGenerator(this);
@@ -94,7 +95,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 		switch(item.getItemId()){
 		case R.id.eventMenuItem:
 			TextView holidayText = (TextView) findViewById(R.id.nlwHolidayText);
-			startActivity(NlwUtil.getAddEventIntent(nlwDateNumber, holidayText.getText()+""));
+			startActivity(NlwUtil.getAddEventIntent(this,nlwDateNumber, holidayText.getText()+""));
 			break;
 		case R.id.feedbackMenuItem:
 			sendFeedback();
@@ -110,7 +111,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
 	private void checkLastLoaded(){
 		int lastDate = prefs.getInt(LAST_CHECKED, 0);
-		if(lastDate>0 && (lastDate!=NlwUtil.getCurrentDateNumber())){
+		if(lastDate>0 && (lastDate!=NlwUtil.getCurrentDateNumber(this))){
 			//showWeekendInfo();
 		}
 	}
@@ -137,7 +138,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 			
 			@Override
 			public void onClick(View v) {
-				startActivity(NlwUtil.getOpenCalendarIntent(nlwDateNumber));
+				startActivity(NlwUtil.getOpenCalendarIntent(MainActivity.this,nlwDateNumber));
 			}
 		});
 	}
@@ -224,26 +225,24 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 		TextView nlwDateText = (TextView) findViewById(R.id.nlwDateText);
 		TextView holidayDetails = (TextView) findViewById(R.id.holidayDetails);
 		TextView daysToGoText = (TextView) findViewById(R.id.daysToGo);
-		int currentDateNumber = NlwUtil.getCurrentDateNumber();
+		int currentDateNumber = NlwUtil.getCurrentDateNumber(this);
         data.moveToFirst();
 		if(data.getCount()>0){
 			nlwDateNumber = data.getInt(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWDATE));
 			readMoreLink = data.getString(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWWIKI));
 			String holiday = data.getString(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWNAME));
 			String holidayDetailText = data.getString(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWTEXT));
-			int year = nlwDateNumber/10000;
-			int month = (nlwDateNumber-(year*10000))/100;
-			int date = nlwDateNumber-(year*10000)-(month*100);
-			int dateDiff = NlwUtil.getDateDiff(nlwDateNumber, currentDateNumber);
-			String monthName = NlwUtil.getMonthName(month, false);
-			year = 2000+year;
-			
+            DateTime nlwDate = NlwUtil.getDateTimeFromNumber(this,nlwDateNumber);
+            int year = nlwDate.getYear();
+			int date = nlwDate.getDayOfMonth();
+			int dateDiff = Days.daysBetween(new DateTime(),nlwDate).getDays();
+            String monthName = nlwDate.toString("MMMM");
+
 			monthYearText.setText(monthName+" "+year);
 			nlwDateText.setText(date+"");
 			holidayText.setText(holiday);
 			holidayDetails.setText(holidayDetailText);
-			daysToGoText.setText(dateDiff+(dateDiff>1?" days ":" day ")+"to go!");
-			NlwUtil.getDateDiff(nlwDateNumber, currentDateNumber);
+			daysToGoText.setText(getResources().getQuantityString(R.plurals.daysRemaining,dateDiff,dateDiff));
 			if(mShareActionProvider!=null){
 				mShareActionProvider.setShareIntent(NlwUtil.getShareDataIntent(holiday+" on "+monthName+" "+date+", "+year+" - "+holidayDetailText+". "+getResources().getString(R.string.readMoreAt)+" "+readMoreLink));
 			}
@@ -259,7 +258,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Spinner countrySelector = (Spinner) findViewById(R.id.countrySelector);
         String selectedCountry = countrySelector.getSelectedItem().toString();
-        String[] selectionArgs = new String[]{NlwUtil.getCurrentDateNumber()+"", selectedCountry};
+        String[] selectionArgs = new String[]{NlwUtil.getCurrentDateNumber(this)+"", selectedCountry};
         return new CursorLoader(MainActivity.this, NlwDataContract.CONTENT_URI_NLW,null,null,selectionArgs,null);
     }
 

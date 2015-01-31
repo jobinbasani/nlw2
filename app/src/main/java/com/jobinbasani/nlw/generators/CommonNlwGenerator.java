@@ -62,7 +62,7 @@ public abstract class CommonNlwGenerator {
 
     public ContentValues getContentValue(DateTime date, String[] data){
         ContentValues values = new ContentValues();
-        values.put(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE, date.toString("yyMMdd"));
+        values.put(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE, date.toString(getContext().getResources().getString(R.string.dateFormat)));
         values.put(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWCOUNTRY, getCountry());
         values.put(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWNAME, data[0]);
         values.put(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWWIKI, data[1]);

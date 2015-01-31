@@ -23,6 +23,8 @@ import com.jobinbasani.nlw.sql.NlwDataContract;
 import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
 import com.jobinbasani.nlw.util.NlwUtil;
 
+import org.joda.time.DateTime;
+
 public class DetailsActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 	
     private static final int LOADER_ID = 2;
@@ -88,7 +90,7 @@ public class DetailsActivity extends ListActivity implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] selectionArgs = new String[]{args.getString(COUNTRY),NlwUtil.getCurrentDateNumber()+""};
+        String[] selectionArgs = new String[]{args.getString(COUNTRY),NlwUtil.getCurrentDateNumber(this)+""};
         return new CursorLoader(DetailsActivity.this, NlwDataContract.CONTENT_URI_NLW_LIST,null,null,selectionArgs,null);
     }
 
@@ -119,24 +121,19 @@ public class DetailsActivity extends ListActivity implements LoaderManager.Loade
 			if(view.getId() == R.id.detailDateText){
 				TextView dateText = (TextView) view;
 				int dateNumber = cursor.getInt(columnIndex);
-				int year = dateNumber/10000;
-				int month = (dateNumber-(year*10000))/100;
-				int date = dateNumber-(year*10000)-(month*100);
-				dateText.setText(date+"");
+                DateTime date = NlwUtil.getDateTimeFromNumber(DetailsActivity.this,dateNumber);
+				dateText.setText(date.getDayOfMonth()+"");
 				dateText.setTag(dateNumber+"");
 				return true;
 			}else if(view.getId() == R.id.detailMonthText){
 				TextView monthText = (TextView) view;
-				int dateNumber = cursor.getInt(columnIndex);
-				int year = dateNumber/10000;
-				int month = (dateNumber-(year*10000))/100;
-				monthText.setText(NlwUtil.getMonthName(month, true));
+                DateTime date = NlwUtil.getDateTimeFromNumber(DetailsActivity.this,cursor.getInt(columnIndex));
+				monthText.setText(date.toString("MMM"));
 				return true;
 			}else if(view.getId() == R.id.detailYearText){
 				TextView yearText = (TextView) view;
-				int dateNumber = cursor.getInt(columnIndex);
-				int year = (dateNumber/10000)+2000;
-				yearText.setText(year+"");
+                DateTime date = NlwUtil.getDateTimeFromNumber(DetailsActivity.this,cursor.getInt(columnIndex));
+				yearText.setText(date.getYear()+"");
 				return true;
 			}else if(view.getId() == R.id.detailHolidayDetails){
 				TextView detailsText = (TextView) view;
@@ -177,21 +174,20 @@ public class DetailsActivity extends ListActivity implements LoaderManager.Loade
 			
 			switch(item.getItemId()){
 			case R.id.detailsMenuOpenCalendar:
-				startActivity(NlwUtil.getOpenCalendarIntent(Integer.parseInt(dateText.getTag()+"")));
+				startActivity(NlwUtil.getOpenCalendarIntent(DetailsActivity.this,Integer.parseInt(dateText.getTag()+"")));
 				break;
 			case R.id.detailsMenuAddEvent:
-				startActivity(NlwUtil.getAddEventIntent(Integer.parseInt(dateText.getTag()+""), holidayText.getText()+""));
+				startActivity(NlwUtil.getAddEventIntent(DetailsActivity.this,Integer.parseInt(dateText.getTag()+""), holidayText.getText()+""));
 				break;
 			case R.id.detailsMenuReadMore:
 				startActivity(NlwUtil.getReadMoreIntent(rl.getContext(),detailsText.getTag()+""));
 				break;
 			case R.id.detailsMenuShareAction:
 				int dateNumber = Integer.parseInt(dateText.getTag()+"");
-				int year = (dateNumber/10000)*10000;
-				int month = (dateNumber - year)/100;
-				int date = dateNumber-(year+(month*100));
-				year = (year/10000)+2000;
-				startActivity(NlwUtil.getShareDataIntent(holidayText.getText()+" on "+NlwUtil.getMonthName(month, false)+" "+date+", "+year+" - "+detailsText.getText()+". "+getResources().getString(R.string.readMoreAt)+" "+detailsText.getTag()));
+                DateTime nlwDate = NlwUtil.getDateTimeFromNumber(DetailsActivity.this,dateNumber);
+				int year = nlwDate.getYear();
+				int date = nlwDate.getDayOfMonth();
+				startActivity(NlwUtil.getShareDataIntent(holidayText.getText()+" on "+nlwDate.toString("MMM")+" "+date+", "+year+" - "+detailsText.getText()+". "+getResources().getString(R.string.readMoreAt)+" "+detailsText.getTag()));
 				break;
 			}
 			
