@@ -33,7 +33,7 @@ public abstract class CommonNlwGenerator {
         return this.context;
     }
 
-    private DateTime getChristmas(int year){
+    public DateTime getChristmas(int year){
         return new DateTime(year, DateTimeConstants.DECEMBER,25,0,0);
     }
 
@@ -48,9 +48,18 @@ public abstract class CommonNlwGenerator {
         }
     }
 
+    public void addNewyear(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime newyearStart = getNewyear(start.getYear());
+        String[] newyearData = getContext().getResources().getStringArray(R.array.newYear);
+        addHolidayInfo(valueList,newyearData,newyearStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime newyearEnd = getNewyear(end.getYear());
+            addHolidayInfo(valueList,newyearData,newyearEnd,start,end);
+        }
+    }
+
     public void addGoodFriday(List<ContentValues> valueList, DateTime start, DateTime end){
         DateTime goodFridayStart = getEasterDate(start.getYear()).minusDays(2);
-
         String[] goodFridayData = getContext().getResources().getStringArray(R.array.goodFriday);
 
         addHolidayInfo(valueList,goodFridayData,goodFridayStart,start,end);
@@ -70,6 +79,10 @@ public abstract class CommonNlwGenerator {
         return values;
     }
 
+    private DateTime getNewyear(int year){
+        return new DateTime(year,DateTimeConstants.JANUARY,1,0,0);
+    }
+
     public DateTime getEasterDate(int year){
         int a = year % 19;
         int b = year / 100;
@@ -85,16 +98,19 @@ public abstract class CommonNlwGenerator {
         int m = (a + 11 * h + 22 * l) / 451;
         int n = (h + l - 7 * m + 114) / 31;
         int p = (h + l - 7 * m + 114) % 31;
-        MutableDateTime easterDate = new MutableDateTime();
-        easterDate.setYear(year);
-        easterDate.setMonthOfYear(n);
-        easterDate.setDayOfMonth(p+1);
-        return easterDate.toDateTime();
+
+        return new DateTime(year,n,p+1,0,0);
     }
 
     public void addHolidayInfo(List<ContentValues> list,String[] data, DateTime date, DateTime start, DateTime end){
         if(canAcceptDate(date,start,end)) {
             list.add(getContentValue(date, data));
+        }
+    }
+
+    public void setFirstMonday(MutableDateTime date){
+        if(date.getDayOfWeek()!=DateTimeConstants.MONDAY){
+            date.addDays(8 - date.getDayOfWeek());
         }
     }
 

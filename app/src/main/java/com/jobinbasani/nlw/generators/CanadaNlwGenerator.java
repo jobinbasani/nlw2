@@ -22,6 +22,7 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
 
     @Override
     public void fillLongWeekends(List<ContentValues> contentValuesList, DateTime start, DateTime end) {
+        addNewyear(contentValuesList, start, end);
         addFamilyDay(contentValuesList,start,end);
         addGoodFriday(contentValuesList,start,end);
         addEasterMonday(contentValuesList, start, end);
@@ -30,7 +31,9 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
         addCivicHoliday(contentValuesList,start,end);
         addLabourDay(contentValuesList,start,end);
         addThanksgiving(contentValuesList,start,end);
+        addRemembranceDay(contentValuesList, start, end);
         addChristmas(contentValuesList,start,end);
+        addBoxingDay(contentValuesList,start,end);
     }
 
     public void addFamilyDay(List<ContentValues> valueList, DateTime start, DateTime end){
@@ -48,6 +51,27 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
         if(start.getYear()!=end.getYear()){
             DateTime familyDayBCEnd = getFamilyDay(end.getYear(),true);
             addHolidayInfo(valueList,familyDayBCData,familyDayBCEnd,start,end);
+        }
+    }
+
+    public void addBoxingDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime boxingDayStart = getChristmas(start.getYear()).plusDays(1);
+        String[] boxingDayData = getContext().getResources().getStringArray(R.array.boxingDayCanada);
+        addHolidayInfo(valueList,boxingDayData,boxingDayStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime boxingDayEnd = getChristmas(end.getYear()).plusDays(1);
+            addHolidayInfo(valueList,boxingDayData,boxingDayEnd,start,end);
+        }
+    }
+
+    public void addRemembranceDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime remembranceDayStart = getRemembranceDay(start.getYear());
+        String[] remembranceDayData = getContext().getResources().getStringArray(R.array.remembranceDay);
+
+        addHolidayInfo(valueList,remembranceDayData,remembranceDayStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime remembranceDayEnd = getRemembranceDay(end.getYear());
+            addHolidayInfo(valueList,remembranceDayData,remembranceDayEnd,start,end);
         }
     }
 
@@ -116,6 +140,10 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
         return new DateTime(year,DateTimeConstants.JULY,1,0,0);
     }
 
+    private DateTime getRemembranceDay(int year){
+        return new DateTime(year,DateTimeConstants.NOVEMBER,11,0,0);
+    }
+
     private DateTime getVictoriaDay(int year){
         MutableDateTime victoriaDay = new MutableDateTime(year, DateTimeConstants.MAY, 25,0,0,0,0);
         if(victoriaDay.getDayOfWeek()==DateTimeConstants.MONDAY){
@@ -152,9 +180,4 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
         return thanksgiving.toDateTime();
     }
 
-    private void setFirstMonday(MutableDateTime date){
-        if(date.getDayOfWeek()!=DateTimeConstants.MONDAY){
-            date.addDays(8 - date.getDayOfWeek());
-        }
-    }
 }
