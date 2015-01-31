@@ -1,15 +1,13 @@
 package com.jobinbasani.nlw;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.jobinbasani.nlw.sql.NlwDataDbHelper;
-import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
-import com.jobinbasani.nlw.util.NlwUtil;
-
-import android.os.Bundle;
 import android.app.ListActivity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
@@ -17,14 +15,18 @@ import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.SimpleCursorAdapter.ViewBinder;
-import android.support.v4.app.NavUtils;
+import android.widget.TextView;
 
-public class DetailsActivity extends ListActivity {
+import com.google.analytics.tracking.android.EasyTracker;
+import com.jobinbasani.nlw.sql.NlwDataContract;
+import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
+import com.jobinbasani.nlw.util.NlwUtil;
+
+public class DetailsActivity extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 	
-	private Cursor cursor;
-	private SQLiteDatabase db;
+    private static final int LOADER_ID = 2;
+    private static final String COUNTRY="Country";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +39,11 @@ public class DetailsActivity extends ListActivity {
 		String country = detailsIntent.getStringExtra(MainActivity.COUNTRY_KEY);
 		TextView holidayCountryText = (TextView) findViewById(R.id.holidayCountryInfo);
 		holidayCountryText.setText(getResources().getString(R.string.upcomingWeekendsText)+" "+country);
-		cursor = getDetailsCursor(country);
-		
-		String[] from = new String[] { NlwDataEntry.COLUMN_NAME_NLWDATE, NlwDataEntry.COLUMN_NAME_NLWNAME, NlwDataEntry.COLUMN_NAME_NLWTEXT, NlwDataEntry.COLUMN_NAME_NLWDATE, NlwDataEntry.COLUMN_NAME_NLWDATE, NlwDataEntry.COLUMN_NAME_NLWDATE };
-	    int[] to = new int[] { R.id.detailDateText, R.id.detailHolidayName, R.id.detailHolidayDetails, R.id.detailYearText, R.id.detailMonthText, R.id.overflowIcon};
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getBaseContext(), R.layout.nlw_details, cursor, from, to, SimpleCursorAdapter.NO_SELECTION);
-		adapter.setViewBinder(new DetailsViewBinder());
-		setListAdapter(adapter);
+
+        Bundle args = new Bundle();
+        args.putString(COUNTRY, country);
+
+        loadData(args);
 	}
 
 	@Override
@@ -56,13 +56,6 @@ public class DetailsActivity extends ListActivity {
 	protected void onStop() {
 		super.onStop();
 		EasyTracker.getInstance(this).activityStop(this); 
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		cursor.close();
-		db.close();
 	}
 
 	/**
@@ -79,26 +72,47 @@ public class DetailsActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	private Cursor getDetailsCursor(String country){
-		NlwDataDbHelper nlwDbHelper = new NlwDataDbHelper(getBaseContext());
-		db = nlwDbHelper.getReadableDatabase();
-		return db.rawQuery("SELECT * FROM "+NlwDataEntry.TABLE_NAME+" WHERE "+NlwDataEntry.COLUMN_NAME_NLWCOUNTRY+"=? AND "+NlwDataEntry.COLUMN_NAME_NLWDATE+">? ORDER BY "+NlwDataEntry.COLUMN_NAME_NLWDATE, new String[]{country,NlwUtil.getCurrentDateNumber()+""});
-	}
-	
-	private class DetailsViewBinder implements ViewBinder{
+
+    private void setListData(Cursor cursor){
+        String[] from = new String[] { NlwDataEntry.COLUMN_NAME_NLWDATE, NlwDataEntry.COLUMN_NAME_NLWNAME, NlwDataEntry.COLUMN_NAME_NLWTEXT, NlwDataEntry.COLUMN_NAME_NLWDATE, NlwDataEntry.COLUMN_NAME_NLWDATE, NlwDataEntry.COLUMN_NAME_NLWDATE };
+        int[] to = new int[] { R.id.detailDateText, R.id.detailHolidayName, R.id.detailHolidayDetails, R.id.detailYearText, R.id.detailMonthText, R.id.overflowIcon};
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getBaseContext(), R.layout.nlw_details, cursor, from, to, SimpleCursorAdapter.NO_SELECTION);
+        adapter.setViewBinder(new DetailsViewBinder());
+        setListAdapter(adapter);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] selectionArgs = new String[]{args.getString(COUNTRY),NlwUtil.getCurrentDateNumber()+""};
+        return new CursorLoader(DetailsActivity.this, NlwDataContract.CONTENT_URI_NLW_LIST,null,null,selectionArgs,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(data!=null){
+            setListData(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    private void loadData(Bundle args){
+        if(getLoaderManager().getLoader(LOADER_ID)!=null){
+            getLoaderManager().restartLoader(LOADER_ID,args,this);
+        }else{
+            getLoaderManager().initLoader(LOADER_ID,args,this);
+        }
+    }
+
+    private class DetailsViewBinder implements ViewBinder{
 
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {

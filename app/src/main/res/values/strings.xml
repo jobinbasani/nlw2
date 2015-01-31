@@ -62,7 +62,7 @@
         <item>A public holiday celebrated in most of Canada on the first Monday in August</item>
     </string-array>
 
-    <string-array name="labourDay">
+    <string-array name="labourDayCanada">
         <item>Labour Day</item>
         <item>https://en.wikipedia.org/wiki/Labour_Day</item>
         <item>Annual holiday to celebrate the achievements of workers</item>

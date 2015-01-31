@@ -8,6 +8,7 @@ import android.net.Uri;
 
 import com.jobinbasani.nlw.sql.NlwDataContract;
 import com.jobinbasani.nlw.sql.NlwDataDbHelper;
+import com.jobinbasani.nlw.util.NlwUtil;
 
 /**
  * Created by jobin.basani on 1/29/2015.
@@ -38,6 +39,8 @@ public class NlwProvider extends ContentProvider {
         switch (uriType){
             case NLW:
                 return dbHelper.getReadableDatabase().rawQuery("SELECT * FROM "+ NlwDataContract.NlwDataEntry.TABLE_NAME+" WHERE "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE+">? AND "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWCOUNTRY+"=? ORDER BY _ID LIMIT 1", selectionArgs);
+            case NLW_LIST:
+                return dbHelper.getReadableDatabase().rawQuery("SELECT * FROM "+ NlwDataContract.NlwDataEntry.TABLE_NAME+" WHERE "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWCOUNTRY+"=? AND "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE+">? ORDER BY "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE, selectionArgs);
         }
 
         return null;

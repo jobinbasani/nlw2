@@ -61,16 +61,8 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         gen.fillLongWeekends(ls,start,end);
         System.out.println(ls);
 
-        MutableDateTime victoriaDay = new MutableDateTime();
-        victoriaDay.setYear(2017);
-        victoriaDay.setMonthOfYear(DateTimeConstants.MAY);
-        victoriaDay.setDayOfMonth(25);
-        if(victoriaDay.getDayOfWeek()==DateTimeConstants.MONDAY){
-            victoriaDay.addWeeks(-1);
-        }else{
-            victoriaDay.addDays(1-victoriaDay.getDayOfWeek());
-        }
-        System.out.println(victoriaDay.toString("dd MMM yyyy"));
+        DateTime th = new DateTime();
+        System.out.println(th.toString("dd MMM yyyy"));
 
     }
 
