@@ -1,31 +1,17 @@
 package com.jobinbasani.nlw;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.analytics.tracking.android.EasyTracker;
-import com.jobinbasani.nlw.generators.CanadaNlwGenerator;
-import com.jobinbasani.nlw.generators.NlwGeneratorI;
-import com.jobinbasani.nlw.sql.NlwDataContract;
-import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
-import com.jobinbasani.nlw.sql.NlwDataDbHelper;
-import com.jobinbasani.nlw.util.NlwUtil;
-
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.ContentValues;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,31 +21,38 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.jobinbasani.nlw.generators.CanadaNlwGenerator;
+import com.jobinbasani.nlw.generators.NlwGeneratorI;
+import com.jobinbasani.nlw.sql.NlwDataContract;
+import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
+import com.jobinbasani.nlw.util.NlwUtil;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.MutableDateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	SharedPreferences prefs;
 	final public static String COUNTRY_KEY = "country";
-	final private static String DB_VERSION_KEY = "dbVersion";
 	final public static String LAST_CHECKED = "lastChecked";
 	public static Context NLW_CONTEXT;
 	private int nlwDateNumber;
 	private String readMoreLink;
 	private ShareActionProvider mShareActionProvider;
+    private static final int LOADER_ID = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
         prefs = getPreferences(MODE_PRIVATE);
-        int dbVersion = prefs.getInt(DB_VERSION_KEY, 0);
 		NLW_CONTEXT = this;
         launchTasks();
-		getLoaderManager().initLoader(1,null,this);
-
 
         NlwGeneratorI gen = new CanadaNlwGenerator(this);
         DateTime start = new DateTime();
@@ -68,15 +61,16 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         gen.fillLongWeekends(ls,start,end);
         System.out.println(ls);
 
-        MutableDateTime dt = new MutableDateTime();
-        dt.setYear(2017);
-        dt.setMonthOfYear(DateTimeConstants.FEBRUARY);
-        dt.setDayOfMonth(1);
-        if(dt.getDayOfWeek()!=1){
-            dt.addDays(8-dt.getDayOfWeek());
+        MutableDateTime victoriaDay = new MutableDateTime();
+        victoriaDay.setYear(2017);
+        victoriaDay.setMonthOfYear(DateTimeConstants.MAY);
+        victoriaDay.setDayOfMonth(25);
+        if(victoriaDay.getDayOfWeek()==DateTimeConstants.MONDAY){
+            victoriaDay.addWeeks(-1);
+        }else{
+            victoriaDay.addDays(1-victoriaDay.getDayOfWeek());
         }
-        dt.addWeeks(2);
-        System.out.println(dt.toString("dd MMM yyyy"));
+        System.out.println(victoriaDay.toString("dd MMM yyyy"));
 
     }
 
@@ -84,7 +78,8 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	protected void onStart() {
 		super.onStart();
 		EasyTracker.getInstance(this).activityStart(this);
-		checkLastLoaded();
+		//checkLastLoaded();
+        loadData(null);
 	}
 
 	@Override
@@ -124,7 +119,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	private void checkLastLoaded(){
 		int lastDate = prefs.getInt(LAST_CHECKED, 0);
 		if(lastDate>0 && (lastDate!=NlwUtil.getCurrentDateNumber())){
-			//loadNextLongWeekend();
+			//showWeekendInfo();
 		}
 	}
 	
@@ -132,9 +127,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 		String defaultCountry = prefs.getString(COUNTRY_KEY, "USA");
 		Spinner countrySpinner = (Spinner) findViewById(R.id.countrySelector);
 		SpinnerAdapter countryArray = countrySpinner.getAdapter();
-		if(defaultCountry.equals(countrySpinner.getSelectedItem().toString())){
-			//loadNextLongWeekend();
-		}
 		int position = -1;
 		for(int i=0;i<countryArray.getCount();i++){
 			if(countryArray.getItem(i).toString().equalsIgnoreCase(defaultCountry)){
@@ -184,7 +176,14 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 			mShareActionProvider.setShareIntent(NlwUtil.getShareDataIntent(holidayText.getText()+" on "+holidayMonthArray[0]+" "+holidayDate.getText()+", "+holidayMonthArray[1]+" - "+holidayDetails.getText()+". "+getResources().getString(R.string.readMoreAt)+" "+readMoreLink));
 		}
 	}
-	
+
+    private void loadData(Bundle args){
+        if(getLoaderManager().getLoader(LOADER_ID)!=null){
+            getLoaderManager().restartLoader(LOADER_ID,args,this);
+        }else{
+            getLoaderManager().initLoader(LOADER_ID,args,this);
+        }
+    }
 	
 	public void onReadMore(View view){
 		if(readMoreLink!=null){
@@ -210,7 +209,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(COUNTRY_KEY, countrySpinner.getSelectedItem().toString());
 				editor.commit();
-				//loadNextLongWeekend();
+				loadData(null);
 			}
 
 			@Override
@@ -226,7 +225,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 		loadPreferences();
 	}
 	
-	private void loadNextLongWeekend(Cursor data) {
+	private void showWeekendInfo(Cursor data) {
 		
 		TextView monthYearText = (TextView) findViewById(R.id.monthYearText);
 		TextView holidayText = (TextView) findViewById(R.id.nlwHolidayText);
@@ -275,7 +274,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data!=null){
-            loadNextLongWeekend(data);
+            showWeekendInfo(data);
         }
     }
 
@@ -283,38 +282,5 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-
-    private class DatabaseLoaderTask extends AsyncTask<Void, Void, Void>{
-		
-		private ProgressDialog pDialog;
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pDialog = new ProgressDialog(MainActivity.this);
-	        pDialog.setMessage(getResources().getString(R.string.loadingText));
-	        pDialog.setIndeterminate(false);
-	        pDialog.setCancelable(true);
-	        pDialog.show();
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			NlwDataDbHelper nlwDbHelper = new NlwDataDbHelper(NLW_CONTEXT);
-			SQLiteDatabase db = nlwDbHelper.getWritableDatabase(); //Creates or inserts initial data asynchronously
-			db.close();
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			pDialog.dismiss();
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(DB_VERSION_KEY, NlwDataDbHelper.DATABASE_VERSION);
-			editor.commit();
-			launchTasks();
-		}
-		
-	}
 
 }

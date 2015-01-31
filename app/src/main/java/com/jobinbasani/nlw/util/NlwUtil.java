@@ -1,9 +1,16 @@
 package com.jobinbasani.nlw.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import com.jobinbasani.nlw.ReadMoreActivity;
+import com.jobinbasani.nlw.generators.AustraliaNlwGenerator;
+import com.jobinbasani.nlw.generators.CanadaNlwGenerator;
+import com.jobinbasani.nlw.generators.NlwGeneratorI;
+import com.jobinbasani.nlw.generators.UkNlwGenerator;
+import com.jobinbasani.nlw.generators.UsaNlwGenerator;
 
 import android.content.Context;
 import android.content.Intent;
@@ -123,5 +130,14 @@ public class NlwUtil {
 		shareIntent.setType("text/plain");
 		return shareIntent;
 	}
+
+    public static List<NlwGeneratorI> getGenerators(Context context){
+        List<NlwGeneratorI> generatorList = new ArrayList<>();
+        generatorList.add(new AustraliaNlwGenerator(context));
+        generatorList.add(new CanadaNlwGenerator(context));
+        generatorList.add(new UkNlwGenerator(context));
+        generatorList.add(new UsaNlwGenerator(context));
+        return generatorList;
+    }
 
 }

@@ -34,11 +34,7 @@ public abstract class CommonNlwGenerator {
     }
 
     private DateTime getChristmas(int year){
-        MutableDateTime dateTime = new MutableDateTime();
-        dateTime.setYear(year);
-        dateTime.setMonthOfYear(DateTimeConstants.DECEMBER);
-        dateTime.setDayOfMonth(25);
-        return dateTime.toDateTime();
+        return new DateTime(year, DateTimeConstants.DECEMBER,25,0,0);
     }
 
     public void addChristmas(List<ContentValues> valueList, DateTime start, DateTime end){
@@ -48,7 +44,7 @@ public abstract class CommonNlwGenerator {
         addHolidayInfo(valueList,christmasData,christmasStart,start,end);
         if(start.getYear()!=end.getYear()){
             DateTime christmasEnd = getChristmas(end.getYear());
-            addHolidayInfo(valueList,christmasData,christmasEnd,start,end);
+            addHolidayInfo(valueList, christmasData, christmasEnd, start, end);
         }
     }
 

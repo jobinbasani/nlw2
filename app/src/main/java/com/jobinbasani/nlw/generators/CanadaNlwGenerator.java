@@ -25,6 +25,8 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
         addFamilyDay(contentValuesList,start,end);
         addGoodFriday(contentValuesList,start,end);
         addEasterMonday(contentValuesList, start, end);
+        addVictoriaDay(contentValuesList, start, end);
+        addCanadaDay(contentValuesList,start,end);
         addChristmas(contentValuesList,start,end);
     }
 
@@ -46,6 +48,26 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
         }
     }
 
+    public void addCanadaDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime canadaDayStart = getCanadaDay(start.getYear());
+        String[] canadaDayData = getContext().getResources().getStringArray(R.array.canadaDay);
+        addHolidayInfo(valueList,canadaDayData,canadaDayStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime canadaDayEnd = getCanadaDay(end.getYear());
+            addHolidayInfo(valueList,canadaDayData,canadaDayEnd,start,end);
+        }
+    }
+
+    public void addVictoriaDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime victoriaDayStart = getVictoriaDay(start.getYear());
+        String[] victoriaDayData = getContext().getResources().getStringArray(R.array.victoriaDay);
+        addHolidayInfo(valueList,victoriaDayData,victoriaDayStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime victoriaDayEnd = getVictoriaDay(end.getYear());
+            addHolidayInfo(valueList,victoriaDayData,victoriaDayEnd,start,end);
+        }
+    }
+
     public void addEasterMonday(List<ContentValues> valueList, DateTime start, DateTime end){
         DateTime easterMondayStart = getEasterDate(start.getYear()).plusDays(1);
         String[] easterMondayData = getContext().getResources().getStringArray(R.array.easterMondayCanada);
@@ -55,6 +77,23 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
             DateTime easterMondayEnd = getEasterDate(end.getYear()).plusDays(1);
             addHolidayInfo(valueList,easterMondayData,easterMondayEnd,start,end);
         }
+    }
+
+    private DateTime getCanadaDay(int year){
+        return new DateTime(year,DateTimeConstants.JULY,1,0,0);
+    }
+
+    private DateTime getVictoriaDay(int year){
+        MutableDateTime victoriaDay = new MutableDateTime();
+        victoriaDay.setYear(year);
+        victoriaDay.setMonthOfYear(DateTimeConstants.MAY);
+        victoriaDay.setDayOfMonth(25);
+        if(victoriaDay.getDayOfWeek()==DateTimeConstants.MONDAY){
+            victoriaDay.addWeeks(-1);
+        }else{
+            victoriaDay.addDays(1-victoriaDay.getDayOfWeek());
+        }
+        return victoriaDay.toDateTime();
     }
 
     private DateTime getFamilyDay(int year, boolean isBC){
