@@ -2,8 +2,6 @@ package com.jobinbasani.nlw;
 
 import android.app.Activity;
 import android.app.LoaderManager;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -22,20 +20,14 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.jobinbasani.nlw.generators.CanadaNlwGenerator;
-import com.jobinbasani.nlw.generators.NlwGeneratorI;
+import com.jobinbasani.nlw.generators.UsaNlwGenerator;
 import com.jobinbasani.nlw.sql.NlwDataContract;
 import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
 import com.jobinbasani.nlw.util.NlwUtil;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
-import org.joda.time.MutableDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -47,6 +39,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	private String readMoreLink;
 	private ShareActionProvider mShareActionProvider;
     private static final int LOADER_ID = 1;
+    private boolean isLoading = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +47,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 		setContentView(R.layout.activity_main);
         prefs = getPreferences(MODE_PRIVATE);
         launchTasks();
-
-        NlwGeneratorI gen = new CanadaNlwGenerator(this);
-        DateTime start = new DateTime();
-        DateTime end = start.plusYears(1);
-        List<ContentValues> ls = new ArrayList<>();
-        gen.fillLongWeekends(ls,start,end);
-        System.out.println(ls);
+        loadData(null);
 
         DateTime th = new DateTime();
         System.out.println(th.toString("dd MMM yyyy"));
@@ -71,8 +58,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	protected void onStart() {
 		super.onStart();
 		EasyTracker.getInstance(this).activityStart(this);
-		//checkLastLoaded();
-        loadData(null);
+		checkLastLoaded();
 	}
 
 	@Override
@@ -110,9 +96,9 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	}
 
 	private void checkLastLoaded(){
-		int lastDate = prefs.getInt(LAST_CHECKED, 0);
+        int lastDate = prefs.getInt(LAST_CHECKED, 0);
 		if(lastDate>0 && (lastDate!=NlwUtil.getCurrentDateNumber(this))){
-			//showWeekendInfo();
+            loadData(null);
 		}
 	}
 	
@@ -171,16 +157,18 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	}
 
     private void loadData(Bundle args){
-        if(getLoaderManager().getLoader(LOADER_ID)!=null){
-            getLoaderManager().restartLoader(LOADER_ID,args,this);
-        }else{
-            getLoaderManager().initLoader(LOADER_ID,args,this);
+        if(!isLoading){
+            isLoading = true;
+            if(getLoaderManager().getLoader(LOADER_ID)!=null){
+                getLoaderManager().restartLoader(LOADER_ID,args,this);
+            }else{
+                getLoaderManager().initLoader(LOADER_ID,args,this);
+            }
         }
     }
 	
 	public void onReadMore(View view){
 		if(readMoreLink!=null){
-			
 			startActivity(NlwUtil.getReadMoreIntent(this, readMoreLink));
 		}
 	}
@@ -242,7 +230,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 			nlwDateText.setText(date+"");
 			holidayText.setText(holiday);
 			holidayDetails.setText(holidayDetailText);
-			daysToGoText.setText(getResources().getQuantityString(R.plurals.daysRemaining,dateDiff,dateDiff));
+			daysToGoText.setText(getResources().getQuantityString(R.plurals.daysRemaining, dateDiff, dateDiff));
 			if(mShareActionProvider!=null){
 				mShareActionProvider.setShareIntent(NlwUtil.getShareDataIntent(holiday+" on "+monthName+" "+date+", "+year+" - "+holidayDetailText+". "+getResources().getString(R.string.readMoreAt)+" "+readMoreLink));
 			}
@@ -267,6 +255,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         if(data!=null){
             showWeekendInfo(data);
         }
+        isLoading = false;
     }
 
     @Override

@@ -46,9 +46,19 @@ public class NlwProvider extends ContentProvider {
                         .append(">? AND ")
                         .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWCOUNTRY)
                         .append("=? ORDER BY ").append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
-                        .append(" LIMIT 1").toString(), selectionArgs);
+                        .append(" LIMIT 1")
+                        .toString(), selectionArgs);
             case NLW_LIST:
-                return dbHelper.getReadableDatabase().rawQuery("SELECT * FROM "+ NlwDataContract.NlwDataEntry.TABLE_NAME+" WHERE "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWCOUNTRY+"=? AND "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE+">? ORDER BY "+ NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE, selectionArgs);
+                return dbHelper.getReadableDatabase().rawQuery(new StringBuilder()
+                        .append("SELECT * FROM ")
+                        .append(NlwDataContract.NlwDataEntry.TABLE_NAME)
+                        .append(" WHERE ")
+                        .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWCOUNTRY)
+                        .append("=? AND ")
+                        .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
+                        .append(">? ORDER BY ")
+                        .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
+                        .toString(), selectionArgs);
         }
 
         return null;

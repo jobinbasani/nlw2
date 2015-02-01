@@ -127,13 +127,25 @@
         <item>The anniversary of Christopher Columbus\' arrival in the Americas, which happened on October 12, 1492</item>
     </string-array>
 
+    <string-array name="veteransDay">
+        <item>Veterans Day</item>
+        <item>http://en.wikipedia.org/wiki/Veterans_Day</item>
+        <item>Honors people who have served in the U.S. Armed Forces, also known as veterans</item>
+    </string-array>
+
+    <string-array name="thanksgivingUsa">
+        <item>Thanksgiving Day</item>
+        <item>http://en.wikipedia.org/wiki/Thanksgiving</item>
+        <item>A day of giving thanks for the blessing of the harvest and of the preceding year</item>
+    </string-array>
+
+    <string-array name="martinLutherDay">
+        <item>Martin Luther King, Jr. Day</item>
+        <item>http://en.wikipedia.org/wiki/Martin_Luther_King,_Jr._Day</item>
+        <item>An American federal holiday marking the birthday of Martin Luther King, Jr. It is observed on the third Monday of January each year, which is around the time of King\'s birthday, January 15.</item>
+    </string-array>
+
     <string-array name="nlwData">
-        <item>151012~USA~Columbus Day~https://en.wikipedia.org/wiki/Columbus_Day~The anniversary of Christopher Columbus\' arrival in the Americas, which happened on October 12, 1492</item>
-        <item>151111~USA~Veterans Day~https://en.wikipedia.org/wiki/Veterans_Day~Honors people who have served in the U.S. Armed Forces, also known as veterans</item>
-        <item>151126~USA~Thanksgiving Day~https://en.wikipedia.org/wiki/Thanksgiving~A day of giving thanks for the blessing of the harvest and of the preceding year</item>
-        <item>151225~USA~Christmas Day~http://en.wikipedia.org/wiki/Christmas~Annual commemoration of the birth of Jesus Christ</item>
-        <item>160101~USA~New Year\’s Day~http://en.wikipedia.org/wiki/New_Year\'s_Day~The first day of the year on the modern Gregorian calendar as well as the Julian calendar used in the Roman Empire since 45 BC.</item>
-        <item>160118~USA~Martin Luther King, Jr. Day~http://en.wikipedia.org/wiki/Martin_Luther_King,_Jr._Day~An American federal holiday marking the birthday of Martin Luther King, Jr. It is observed on the third Monday of January each year, which is around the time of King\'s birthday, January 15. </item>
         <item>150126~Australia~Australia Day~https://en.wikipedia.org/wiki/Australia_Day~The official national day of Australia, celebrated annually on 26 January, which marks the anniversary of the 1788 arrival of the First Fleet of British Ships at Sydney Cove, New South Wales, and raising of the Flag of Great Britain at that site by Governor Arthur Phillip</item>
         <item>150309~Australia~Canberra Day~https://en.wikipedia.org/wiki/Canberra_Day~A public holiday held annually on the second Monday in March in the Australian Capital Territory (ACT) to celebrate the official naming of Canberra. Observed in Australian Capital Territory.</item>
         <item>150403~Australia~Good Friday~https://en.wikipedia.org/wiki/Good_Friday~Commemorating the crucifixion of Jesus Christ and his death at Calvary</item>

@@ -23,11 +23,14 @@ public class UsaNlwGenerator extends CommonNlwGenerator implements NlwGeneratorI
     @Override
     public void fillLongWeekends(List<ContentValues> contentValuesList, DateTime start, DateTime end) {
         addNewyear(contentValuesList, start, end);
+        addMartinLutherDay(contentValuesList, start, end);
         addPresidentsDay(contentValuesList, start, end);
         addMemorialDay(contentValuesList, start, end);
         addIndependenceDay(contentValuesList, start, end);
         addLaborDay(contentValuesList, start, end);
         addColumbusDay(contentValuesList, start, end);
+        addVeteransDay(contentValuesList, start, end);
+        addThanksgivingDay(contentValuesList, start, end);
         addChristmas(contentValuesList,start,end);
     }
 
@@ -38,6 +41,36 @@ public class UsaNlwGenerator extends CommonNlwGenerator implements NlwGeneratorI
         if(start.getYear()!=end.getYear()){
             DateTime presidentsDayEnd = getPresidentsDay(end.getYear());
             addHolidayInfo(valueList,presidentsDayData,presidentsDayEnd,start,end);
+        }
+    }
+
+    public void addMartinLutherDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime martinLutherDayStart = getMartinLutherDay(start.getYear());
+        String[] martinLutherDayData = getContext().getResources().getStringArray(R.array.martinLutherDay);
+        addHolidayInfo(valueList,martinLutherDayData,martinLutherDayStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime martinLutherDayEnd = getMartinLutherDay(end.getYear());
+            addHolidayInfo(valueList,martinLutherDayData,martinLutherDayEnd,start,end);
+        }
+    }
+
+    public void addThanksgivingDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime thanksgivingStart = getThanksgivingDay(start.getYear());
+        String[] thanksgivingData = getContext().getResources().getStringArray(R.array.thanksgivingUsa);
+        addHolidayInfo(valueList,thanksgivingData,thanksgivingStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime thanksgivingEnd = getThanksgivingDay(end.getYear());
+            addHolidayInfo(valueList,thanksgivingData,thanksgivingEnd,start,end);
+        }
+    }
+
+    public void addVeteransDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime veteransDayStart = getVeteransDay(start.getYear());
+        String[] veteransDayData = getContext().getResources().getStringArray(R.array.veteransDay);
+        addHolidayInfo(valueList,veteransDayData,veteransDayStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime veteransDayEnd = getVeteransDay(end.getYear());
+            addHolidayInfo(valueList,veteransDayData,veteransDayEnd,start,end);
         }
     }
 
@@ -111,5 +144,31 @@ public class UsaNlwGenerator extends CommonNlwGenerator implements NlwGeneratorI
         setFirstMonday(columbusDay);
         columbusDay.addWeeks(1);
         return columbusDay.toDateTime();
+    }
+
+    private DateTime getVeteransDay(int year){
+        return new DateTime(year,DateTimeConstants.NOVEMBER,11,0,0);
+    }
+
+    private DateTime getThanksgivingDay(int year){
+        MutableDateTime thanksgivingDay = new MutableDateTime(year,DateTimeConstants.NOVEMBER,1,0,0,0,0);
+        if(thanksgivingDay.getDayOfWeek()!=DateTimeConstants.THURSDAY){
+            if(thanksgivingDay.getDayOfWeek()==DateTimeConstants.SUNDAY){
+                thanksgivingDay.addDays(4);
+            }else if(thanksgivingDay.getDayOfWeek()<DateTimeConstants.THURSDAY){
+                thanksgivingDay.addDays(4-thanksgivingDay.getDayOfWeek());
+            } else if (thanksgivingDay.getDayOfWeek()>DateTimeConstants.THURSDAY){
+                thanksgivingDay.addDays(11-thanksgivingDay.getDayOfWeek());
+            }
+        }
+        thanksgivingDay.addWeeks(3);
+        return thanksgivingDay.toDateTime();
+    }
+
+    private DateTime getMartinLutherDay(int year){
+        MutableDateTime martinLutherDay = new MutableDateTime(year, DateTimeConstants.JANUARY,1,0,0,0,0);
+        setFirstMonday(martinLutherDay);
+        martinLutherDay.addWeeks(2);
+        return martinLutherDay.toDateTime();
     }
 }
