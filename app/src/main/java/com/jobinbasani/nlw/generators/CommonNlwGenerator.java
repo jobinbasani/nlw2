@@ -124,6 +124,12 @@ public abstract class CommonNlwGenerator {
         }
     }
 
+    public void setLastMonday(MutableDateTime date){
+        if(date.getDayOfWeek()!=DateTimeConstants.MONDAY){
+            date.addDays(1 - date.getDayOfWeek());
+        }
+    }
+
     private boolean canAcceptDate(DateTime event, DateTime start, DateTime end){
         return (event.isAfter(start) && event.isBefore(end));
     }

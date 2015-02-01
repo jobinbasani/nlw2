@@ -123,9 +123,7 @@ public class UsaNlwGenerator extends CommonNlwGenerator implements NlwGeneratorI
 
     private DateTime getMemorialDay(int year){
         MutableDateTime memorialDay = new MutableDateTime(year,DateTimeConstants.MAY,31,0,0,0,0);
-        if(memorialDay.getDayOfWeek()!=DateTimeConstants.MONDAY){
-            memorialDay.addDays(1-memorialDay.getDayOfWeek());
-        }
+        setLastMonday(memorialDay);
         return memorialDay.toDateTime();
     }
 
