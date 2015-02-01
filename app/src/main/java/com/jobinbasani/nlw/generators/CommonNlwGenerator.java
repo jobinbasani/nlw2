@@ -58,6 +58,16 @@ public abstract class CommonNlwGenerator {
         }
     }
 
+    public void addBoxingDay(List<ContentValues> valueList, DateTime start, DateTime end){
+        DateTime boxingDayStart = getBoxingDay(start.getYear());
+        String[] boxingDayData = getContext().getResources().getStringArray(R.array.boxingDay);
+        addHolidayInfo(valueList,boxingDayData,boxingDayStart,start,end);
+        if(start.getYear()!=end.getYear()){
+            DateTime boxingDayEnd = getBoxingDay(end.getYear());
+            addHolidayInfo(valueList,boxingDayData,boxingDayEnd,start,end);
+        }
+    }
+
     public void addGoodFriday(List<ContentValues> valueList, DateTime start, DateTime end){
         DateTime goodFridayStart = getEasterDate(start.getYear()).minusDays(2);
         String[] goodFridayData = getContext().getResources().getStringArray(R.array.goodFriday);
@@ -116,5 +126,9 @@ public abstract class CommonNlwGenerator {
 
     private boolean canAcceptDate(DateTime event, DateTime start, DateTime end){
         return (event.isAfter(start) && event.isBefore(end));
+    }
+
+    public DateTime getBoxingDay(int year){
+        return new DateTime(year, DateTimeConstants.DECEMBER,26,0,0);
     }
 }

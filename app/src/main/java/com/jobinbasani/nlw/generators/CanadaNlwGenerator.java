@@ -55,11 +55,11 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
     }
 
     public void addBoxingDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime boxingDayStart = getChristmas(start.getYear()).plusDays(1);
+        DateTime boxingDayStart = getBoxingDay(start.getYear());
         String[] boxingDayData = getContext().getResources().getStringArray(R.array.boxingDayCanada);
         addHolidayInfo(valueList,boxingDayData,boxingDayStart,start,end);
         if(start.getYear()!=end.getYear()){
-            DateTime boxingDayEnd = getChristmas(end.getYear()).plusDays(1);
+            DateTime boxingDayEnd = getBoxingDay(end.getYear());
             addHolidayInfo(valueList,boxingDayData,boxingDayEnd,start,end);
         }
     }
