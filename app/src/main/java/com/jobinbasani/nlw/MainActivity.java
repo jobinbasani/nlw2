@@ -20,7 +20,6 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.jobinbasani.nlw.generators.UsaNlwGenerator;
 import com.jobinbasani.nlw.sql.NlwDataContract;
 import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
 import com.jobinbasani.nlw.util.NlwUtil;
@@ -48,10 +47,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
         prefs = getPreferences(MODE_PRIVATE);
         launchTasks();
         loadData(null);
-
-        DateTime th = new DateTime();
-        System.out.println(th.toString("dd MMM yyyy"));
-
     }
 
 	@Override
