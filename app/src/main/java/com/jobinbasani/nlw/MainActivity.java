@@ -218,7 +218,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
             DateTime nlwDate = NlwUtil.getDateTimeFromNumber(this,nlwDateNumber);
             int year = nlwDate.getYear();
 			int date = nlwDate.getDayOfMonth();
-			int dateDiff = Days.daysBetween(new DateTime(),nlwDate).getDays();
+			int dateDiff = Days.daysBetween(new DateTime().withTimeAtStartOfDay(),nlwDate).getDays();
             String monthName = nlwDate.toString("MMMM");
 
 			monthYearText.setText(monthName+" "+year);
