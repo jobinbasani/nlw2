@@ -19,11 +19,13 @@ public class NlwProvider extends ContentProvider {
     private static UriMatcher URI_MATCHER;
     private static final int NLW = 1;
     private static final int NLW_LIST = 2;
+    private static final int NLW_LIST_PAST = 3;
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URI_MATCHER.addURI(NlwDataContract.AUTHORITY,NlwDataContract.NLW,NLW);
         URI_MATCHER.addURI(NlwDataContract.AUTHORITY,NlwDataContract.NLW_LIST,NLW_LIST);
+        URI_MATCHER.addURI(NlwDataContract.AUTHORITY,NlwDataContract.NLW_LIST_PAST,NLW_LIST_PAST);
     }
 
     @Override
@@ -58,6 +60,18 @@ public class NlwProvider extends ContentProvider {
                         .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
                         .append(">? ORDER BY ")
                         .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
+                        .toString(), selectionArgs);
+            case NLW_LIST_PAST:
+                return dbHelper.getReadableDatabase().rawQuery(new StringBuilder()
+                        .append("SELECT * FROM ")
+                        .append(NlwDataContract.NlwDataEntry.TABLE_NAME)
+                        .append(" WHERE ")
+                        .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWCOUNTRY)
+                        .append("=? AND ")
+                        .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
+                        .append("<? ORDER BY ")
+                        .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
+                        .append(" DESC ")
                         .toString(), selectionArgs);
         }
 

@@ -17,7 +17,7 @@ import java.util.List;
 public class NlwDataDbHelper extends SQLiteOpenHelper {
 	
 	private Context context;
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "NlwData.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
@@ -48,8 +48,9 @@ public class NlwDataDbHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_CREATE_ENTRIES);
 
         List<ContentValues> valueList = new ArrayList<>();
-        DateTime start = new DateTime();
-        DateTime end = start.plusYears(1);
+        DateTime now = new DateTime();
+        DateTime start = now.minusMonths(6);
+        DateTime end = now.plusMonths(6);
         for(NlwGeneratorI generator: NlwUtil.getGenerators(this.context)){
             generator.fillLongWeekends(valueList,start,end);
         }

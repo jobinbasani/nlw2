@@ -23,12 +23,17 @@
     <string name="infoAction">Info</string>
     <string name="feedbackSubject">NLW Feedback</string>
     <string name="feedbackIntentTitle">Send Feedback</string>
-    <string name="loadingText">Loading &#8230;</string>
+    <string name="loadingText">Loading …</string>
     <string name="readMoreAt">Read more at</string>
     <string name="title_activity_read_more">Read More</string>
     <string name="openBrowser">Open in Browser</string>
     <string name="browserChooserTitle">Select Browser</string>
     <string name="overflowDescr">Holiday details menu</string>
+    <string name="title_activity_nlw_list">NlwListActivity</string>
+    <string name="title_section1">Upcoming</string>
+    <string name="title_section2">Past</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
     <string-array name="countryArray">
         <item>Australia</item>
@@ -36,217 +41,181 @@
         <item>UK</item>
         <item>USA</item>
     </string-array>
-
     <string-array name="christmas">
         <item>Christmas Day</item>
         <item>http://en.wikipedia.org/wiki/Christmas</item>
         <item>Annual commemoration of the birth of Jesus Christ</item>
     </string-array>
-
     <string-array name="familyDay">
         <item>Family Day</item>
         <item>http://en.wikipedia.org/wiki/Family_Day_(Canada)</item>
         <item>Also called Louis Riel Day (Manitoba), Islander Day (PEI), Nova Scotia Heritage Day (Nova Scotia)</item>
     </string-array>
-
     <string-array name="familyDayBC">
         <item>Family Day(BC)</item>
         <item>http://en.wikipedia.org/wiki/Family_Day_(Canada)</item>
         <item>A statutory holiday occurring on second Monday in February observed in BC</item>
     </string-array>
-
     <string-array name="goodFriday">
         <item>Good Friday</item>
         <item>http://en.wikipedia.org/wiki/Good_Friday</item>
         <item>Good Friday is a religious holiday, observed primarily by Christians, commemorating the crucifixion of Jesus Christ and his death at Calvary.</item>
     </string-array>
-
     <string-array name="easterMondayCanada">
         <item>Easter Monday</item>
         <item>http://en.wikipedia.org/wiki/Easter_Monday</item>
         <item>Easter Monday is the day after Easter Sunday and is celebrated as a holiday in some largely Christian cultures, especially Catholic and Eastern Christian cultures. Observed in Quebec.</item>
     </string-array>
-
     <string-array name="victoriaDay">
         <item>Victoria Day</item>
         <item>http://en.wikipedia.org/wiki/Victoria_Day</item>
         <item>A federal Canadian public holiday celebrated on the last Monday before May 25, in honour of Queen Victoria\'s birthday.</item>
     </string-array>
-
     <string-array name="canadaDay">
         <item>Canada Day</item>
         <item>http://en.wikipedia.org/wiki/Canada_Day</item>
         <item>National day of Canada, celebrating the anniversary of the July 1, 1867, enactment of the British North America Act, 1867.</item>
     </string-array>
-
     <string-array name="civicHoliday">
         <item>Civic Holiday</item>
         <item>http://en.wikipedia.org/wiki/Civic_Holiday</item>
         <item>A public holiday celebrated in most of Canada on the first Monday in August</item>
     </string-array>
-
     <string-array name="labourDayCanada">
         <item>Labour Day</item>
         <item>https://en.wikipedia.org/wiki/Labour_Day</item>
         <item>Annual holiday to celebrate the achievements of workers</item>
     </string-array>
-
     <string-array name="thanksgivingCanada">
         <item>Thanksgiving</item>
         <item>http://en.wikipedia.org/wiki/Thanksgiving_(Canada)</item>
         <item>Occurring on the second Monday in October, is an annual Canadian holiday which celebrates the harvest and other blessings of the past year.</item>
     </string-array>
-
     <string-array name="remembranceDay">
         <item>Remembrance Day</item>
         <item>http://en.wikipedia.org/wiki/Remembrance_Day</item>
         <item>A memorial day observed in Commonwealth countries since the end of World War I to remember the members of their armed forces who have died in the line of duty.</item>
     </string-array>
-
     <string-array name="boxingDayCanada">
         <item>Boxing Day</item>
         <item>http://en.wikipedia.org/wiki/Boxing_Day</item>
         <item>The first or second weekday after Christmas Day.Observed in Ontario</item>
     </string-array>
-
     <string-array name="newYear">
         <item>New Year\’s Day</item>
         <item>http://en.wikipedia.org/wiki/New_Year\'s_Day</item>
         <item>The first day of the year on the modern Gregorian calendar as well as the Julian calendar used in the Roman Empire since 45 BC.</item>
     </string-array>
-
     <string-array name="washingtonDay">
         <item>Washington\'s Birthday</item>
         <item>http://en.wikipedia.org/wiki/Washington\'s_Birthday</item>
         <item>A United States federal holiday celebrated on the third Monday of February in honor of George Washington, the first President of the United States.</item>
     </string-array>
-
     <string-array name="memorialDayUsa">
         <item>Memorial Day</item>
         <item>http://en.wikipedia.org/wiki/Memorial_Day</item>
         <item>A day of remembering the men and women who died while serving in the United States Armed Forces</item>
     </string-array>
-
     <string-array name="independenceDayUsa">
         <item>Independence Day</item>
         <item>http://en.wikipedia.org/wiki/Independence_Day_(United_States)</item>
         <item>Commemorating the adoption of the Declaration of Independence on July 4, 1776, declaring independence from the Kingdom of Great Britain. July 4 being Saturday, holiday will be on July 3.</item>
     </string-array>
-
     <string-array name="laborDayUsa">
         <item>Labor Day</item>
         <item>https://en.wikipedia.org/wiki/Labor_Day</item>
         <item>A celebration of the American labor movement and is dedicated to the social and economic achievements of workers</item>
     </string-array>
-
     <string-array name="columbusDay">
         <item>Columbus Day</item>
         <item>http://en.wikipedia.org/wiki/Columbus_Day</item>
         <item>The anniversary of Christopher Columbus\' arrival in the Americas, which happened on October 12, 1492</item>
     </string-array>
-
     <string-array name="veteransDay">
         <item>Veterans Day</item>
         <item>http://en.wikipedia.org/wiki/Veterans_Day</item>
         <item>Honors people who have served in the U.S. Armed Forces, also known as veterans</item>
     </string-array>
-
     <string-array name="thanksgivingUsa">
         <item>Thanksgiving Day</item>
         <item>http://en.wikipedia.org/wiki/Thanksgiving</item>
         <item>A day of giving thanks for the blessing of the harvest and of the preceding year</item>
     </string-array>
-
     <string-array name="martinLutherDay">
         <item>Martin Luther King, Jr. Day</item>
         <item>http://en.wikipedia.org/wiki/Martin_Luther_King,_Jr._Day</item>
         <item>An American federal holiday marking the birthday of Martin Luther King, Jr. It is observed on the third Monday of January each year, which is around the time of King\'s birthday, January 15.</item>
     </string-array>
-
     <string-array name="australiaDay">
         <item>Australia Day</item>
         <item>https://en.wikipedia.org/wiki/Australia_Day</item>
         <item>The official national day of Australia, celebrated annually on 26 January, which marks the anniversary of the 1788 arrival of the First Fleet of British Ships at Sydney Cove, New South Wales, and raising of the Flag of Great Britain at that site by Governor Arthur Phillip</item>
     </string-array>
-
     <string-array name="canberraDay">
         <item>Canberra Day</item>
         <item>https://en.wikipedia.org/wiki/Canberra_Day</item>
         <item>A public holiday held annually on the second Monday in March in the Australian Capital Territory (ACT) to celebrate the official naming of Canberra. Observed in Australian Capital Territory.</item>
     </string-array>
-
     <string-array name="easterSaturday">
         <item>Easter Saturday</item>
         <item>https://en.wikipedia.org/wiki/Easter_Saturday</item>
         <item>Easter Saturday, or Bright Saturday, on the Christian calendar is the Saturday following the festival of Easter, the Saturday of Easter or Bright Week.</item>
     </string-array>
-
     <string-array name="easterMondayAus">
         <item>Easter Monday</item>
         <item>https://en.wikipedia.org/wiki/Easter_Monday</item>
         <item>Easter Monday in the Roman Catholic liturgical calendar is the second day of the octave of Easter Week and analogously in the Eastern Orthodox Church is the second day of Bright Week.</item>
     </string-array>
-
     <string-array name="anzacDay">
         <item>ANZAC Day</item>
         <item>https://en.wikipedia.org/wiki/Anzac_Day</item>
         <item>A national day of remembrance in Australia and New Zealand that broadly commemorates all Australians and New Zealanders "who served and died in all wars, conflicts, and peacekeeping operations" and "the contribution and suffering of all those who have served."</item>
     </string-array>
-
     <string-array name="queensBirthday">
         <item>Queens Birthday</item>
         <item>https://en.wikipedia.org/wiki/Queen\'s_Official_Birthday</item>
         <item>The selected day on which the birthday of the monarch of the Commonwealth realms (currently Queen Elizabeth II) is officially celebrated</item>
     </string-array>
-
     <string-array name="labourDayAus">
         <item>Labour Day</item>
         <item>https://en.wikipedia.org/wiki/Labour_Day</item>
         <item>Annual holiday to celebrate the achievements of workers. Observed in Australian Capital Territory, New South Wales and South Australia.</item>
     </string-array>
-
     <string-array name="boxingDay">
         <item>Boxing Day</item>
         <item>http://en.wikipedia.org/wiki/Boxing_Day</item>
         <item>Boxing Day is a holiday traditionally celebrated the day following Christmas Day</item>
     </string-array>
-
     <string-array name="easterMondayUk">
         <item>Easter Monday</item>
         <item>https://en.wikipedia.org/wiki/Easter_Monday</item>
         <item>Easter Monday in the Roman Catholic liturgical calendar is the second day of the octave of Easter Week and analogously in the Eastern Orthodox Church is the second day of Bright Week.Observed in England, Northern Ireland and Wales.</item>
     </string-array>
-
     <string-array name="mayDayHoliday">
         <item>May Day Holiday</item>
         <item>http://en.wikipedia.org/wiki/May_Day</item>
         <item>A traditional spring holiday and coincides with International Workers\' Day</item>
     </string-array>
-
     <string-array name="springBankHoliday">
         <item>Spring Bank Holiday</item>
         <item>http://en.wikipedia.org/wiki/Bank_holiday</item>
         <item>Last Monday in May</item>
     </string-array>
-
     <string-array name="summerBankHolidayFirst">
         <item>Summer Bank Holiday</item>
         <item>http://en.wikipedia.org/wiki/Bank_holiday</item>
         <item>First Monday in August. Observed in Scotland.</item>
     </string-array>
-
     <string-array name="summerBankHolidayLast">
         <item>Summer Bank Holiday</item>
         <item>http://en.wikipedia.org/wiki/Bank_holiday</item>
         <item>Last Monday in August. Observed in England, Northern Ireland and Wales.</item>
     </string-array>
-
     <string-array name="halloween">
         <item>Halloween</item>
         <item>http://en.wikipedia.org/wiki/Halloween</item>
         <item>A yearly celebration on 31 October, the eve of the Western Christian feast of All Hallows\' Day</item>
     </string-array>
-
     <string-array name="guyFawkesDay">
         <item>Guy Fawkes Day</item>
         <item>http://en.wikipedia.org/wiki/Guy_Fawkes_Night</item>

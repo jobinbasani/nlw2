@@ -169,7 +169,7 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	}
 	
 	public void onViewAll(View view){
-		Intent viewAllIntent = new Intent(this, DetailsActivity.class);
+		Intent viewAllIntent = new Intent(this, NlwListActivity.class);
 		Spinner countrySpinner = (Spinner) findViewById(R.id.countrySelector);
 		viewAllIntent.putExtra(COUNTRY_KEY, countrySpinner.getSelectedItem().toString());
 		startActivity(viewAllIntent);
