@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.analytics.tracking.android.EasyTracker;
 import com.jobinbasani.nlw.adapters.NlwTabAdapter;
 import com.jobinbasani.nlw.fragments.WeekendList;
 import com.jobinbasani.nlw.util.NlwUtil;
@@ -73,6 +74,18 @@ public class NlwListActivity extends Activity implements ActionBar.TabListener, 
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
     }
 
     @Override
