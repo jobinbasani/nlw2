@@ -91,11 +91,7 @@ public class WeekendList extends ListFragment implements LoaderManager.LoaderCal
     }
 
     private void loadData(int loaderId){
-        if(getLoaderManager().getLoader(loaderId)!=null){
-            getLoaderManager().restartLoader(loaderId,null,this);
-        }else{
-            getLoaderManager().initLoader(loaderId,null,this);
-        }
+        getLoaderManager().initLoader(loaderId,null,this);
     }
 
     @Override
