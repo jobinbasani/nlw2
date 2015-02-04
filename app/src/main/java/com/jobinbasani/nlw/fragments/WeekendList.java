@@ -64,7 +64,6 @@ public class WeekendList extends ListFragment implements LoaderManager.LoaderCal
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             listType = getArguments().getString(LIST_TYPE);
         }

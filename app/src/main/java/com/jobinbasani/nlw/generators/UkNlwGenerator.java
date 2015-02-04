@@ -36,72 +36,51 @@ public class UkNlwGenerator extends CommonNlwGenerator implements NlwGeneratorI 
     }
 
     public void addEasterMonday(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime easterMondayStart = getEasterDate(start.getYear()).plusDays(1);
         String[] easterMondayData = getContext().getResources().getStringArray(R.array.easterMondayUk);
-        addHolidayInfo(valueList,easterMondayData,easterMondayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime easterMondayEnd = getEasterDate(end.getYear()).plusDays(1);
-            addHolidayInfo(valueList,easterMondayData,easterMondayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,easterMondayData,getEasterDate(year).plusDays(1),start,end);
         }
     }
 
     public void addHalloween(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime halloweenStart = getHalloweenDay(start.getYear());
         String[] halloweenData = getContext().getResources().getStringArray(R.array.halloween);
-        addHolidayInfo(valueList,halloweenData,halloweenStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime halloweenEnd = getHalloweenDay(end.getYear());
-            addHolidayInfo(valueList,halloweenData,halloweenEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,halloweenData,getHalloweenDay(year),start,end);
         }
     }
 
     public void addGuyFawkes(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime guyFawkesStart = getGuyFawkesDay(start.getYear());
         String[] guyFawkesData = getContext().getResources().getStringArray(R.array.guyFawkesDay);
-        addHolidayInfo(valueList,guyFawkesData,guyFawkesStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime guyFawkesEnd = getGuyFawkesDay(end.getYear());
-            addHolidayInfo(valueList,guyFawkesData,guyFawkesEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,guyFawkesData,getGuyFawkesDay(year),start,end);
         }
     }
 
     public void addSpringBankHoliday(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime springBankHolidayStart = getSpringBankHoliday(start.getYear());
         String[] springBankHolidayData = getContext().getResources().getStringArray(R.array.springBankHoliday);
-        addHolidayInfo(valueList,springBankHolidayData,springBankHolidayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime springBankHolidayEnd = getSpringBankHoliday(end.getYear());
-            addHolidayInfo(valueList,springBankHolidayData,springBankHolidayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,springBankHolidayData,getSpringBankHoliday(year),start,end);
         }
     }
 
     public void addFirstSummerBankHoliday(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime summerBankHolidayStart = getFirstSummerBankHoliday(start.getYear());
         String[] summerBankHolidayData = getContext().getResources().getStringArray(R.array.summerBankHolidayFirst);
-        addHolidayInfo(valueList,summerBankHolidayData,summerBankHolidayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime summerBankHolidayEnd = getFirstSummerBankHoliday(end.getYear());
-            addHolidayInfo(valueList,summerBankHolidayData,summerBankHolidayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,summerBankHolidayData,getFirstSummerBankHoliday(year),start,end);
         }
     }
 
     public void addLastSummerBankHoliday(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime summerBankHolidayStart = getLastSummerBankHoliday(start.getYear());
         String[] summerBankHolidayData = getContext().getResources().getStringArray(R.array.summerBankHolidayLast);
-        addHolidayInfo(valueList,summerBankHolidayData,summerBankHolidayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime summerBankHolidayEnd = getLastSummerBankHoliday(end.getYear());
-            addHolidayInfo(valueList,summerBankHolidayData,summerBankHolidayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,summerBankHolidayData,getLastSummerBankHoliday(year),start,end);
         }
     }
 
     public void addMayDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime mayDayStart = getMayDay(start.getYear());
         String[] mayDayData = getContext().getResources().getStringArray(R.array.mayDayHoliday);
-        addHolidayInfo(valueList,mayDayData,mayDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime mayDayEnd = getMayDay(end.getYear());
-            addHolidayInfo(valueList,mayDayData,mayDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,mayDayData,getMayDay(year),start,end);
         }
     }
 

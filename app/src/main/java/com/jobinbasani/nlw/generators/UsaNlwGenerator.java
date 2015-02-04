@@ -35,82 +35,58 @@ public class UsaNlwGenerator extends CommonNlwGenerator implements NlwGeneratorI
     }
 
     public void addPresidentsDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime presidentsDayStart = getPresidentsDay(start.getYear());
         String[] presidentsDayData = getContext().getResources().getStringArray(R.array.washingtonDay);
-        addHolidayInfo(valueList,presidentsDayData,presidentsDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime presidentsDayEnd = getPresidentsDay(end.getYear());
-            addHolidayInfo(valueList,presidentsDayData,presidentsDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,presidentsDayData,getPresidentsDay(year),start,end);
         }
     }
 
     public void addMartinLutherDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime martinLutherDayStart = getMartinLutherDay(start.getYear());
         String[] martinLutherDayData = getContext().getResources().getStringArray(R.array.martinLutherDay);
-        addHolidayInfo(valueList,martinLutherDayData,martinLutherDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime martinLutherDayEnd = getMartinLutherDay(end.getYear());
-            addHolidayInfo(valueList,martinLutherDayData,martinLutherDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,martinLutherDayData,getMartinLutherDay(year),start,end);
         }
     }
 
     public void addThanksgivingDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime thanksgivingStart = getThanksgivingDay(start.getYear());
         String[] thanksgivingData = getContext().getResources().getStringArray(R.array.thanksgivingUsa);
-        addHolidayInfo(valueList,thanksgivingData,thanksgivingStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime thanksgivingEnd = getThanksgivingDay(end.getYear());
-            addHolidayInfo(valueList,thanksgivingData,thanksgivingEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,thanksgivingData,getThanksgivingDay(year),start,end);
         }
     }
 
     public void addVeteransDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime veteransDayStart = getVeteransDay(start.getYear());
         String[] veteransDayData = getContext().getResources().getStringArray(R.array.veteransDay);
-        addHolidayInfo(valueList,veteransDayData,veteransDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime veteransDayEnd = getVeteransDay(end.getYear());
-            addHolidayInfo(valueList,veteransDayData,veteransDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,veteransDayData,getVeteransDay(year),start,end);
         }
     }
 
     public void addColumbusDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime columbusDayStart = getColumbusDay(start.getYear());
         String[] columbusDayData = getContext().getResources().getStringArray(R.array.columbusDay);
-        addHolidayInfo(valueList,columbusDayData,columbusDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime columbusDayEnd = getColumbusDay(end.getYear());
-            addHolidayInfo(valueList,columbusDayData,columbusDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,columbusDayData,getColumbusDay(year),start,end);
         }
     }
 
     public void addLaborDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime laborDayStart = getLaborDay(start.getYear());
         String[] laborDayData = getContext().getResources().getStringArray(R.array.laborDayUsa);
-        addHolidayInfo(valueList,laborDayData,laborDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime laborDayEnd = getLaborDay(end.getYear());
-            addHolidayInfo(valueList,laborDayData,laborDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,laborDayData,getLaborDay(year),start,end);
         }
     }
 
     public void addIndependenceDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime independenceDayStart = getIndependenceDay(start.getYear());
         String[] independenceDayData = getContext().getResources().getStringArray(R.array.independenceDayUsa);
-        addHolidayInfo(valueList,independenceDayData,independenceDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime independenceDayEnd = getIndependenceDay(end.getYear());
-            addHolidayInfo(valueList,independenceDayData,independenceDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,independenceDayData,getIndependenceDay(year),start,end);
         }
     }
 
     public void addMemorialDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime memorialDayStart = getMemorialDay(start.getYear());
         String[] memorialDayData = getContext().getResources().getStringArray(R.array.memorialDayUsa);
-        addHolidayInfo(valueList,memorialDayData,memorialDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime memorialDayEnd = getMemorialDay(end.getYear());
-            addHolidayInfo(valueList,memorialDayData,memorialDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,memorialDayData,getMemorialDay(year),start,end);
         }
     }
 

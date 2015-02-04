@@ -10,7 +10,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.MutableDateTime;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by jobin.basani on 1/29/2015.
@@ -38,44 +40,30 @@ public abstract class CommonNlwGenerator {
     }
 
     public void addChristmas(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime christmasStart = getChristmas(start.getYear());
         String[] christmasData = getContext().getResources().getStringArray(R.array.christmas);
-
-        addHolidayInfo(valueList,christmasData,christmasStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime christmasEnd = getChristmas(end.getYear());
-            addHolidayInfo(valueList, christmasData, christmasEnd, start, end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,christmasData,getChristmas(year),start,end);
         }
     }
 
     public void addNewyear(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime newyearStart = getNewyear(start.getYear());
         String[] newyearData = getContext().getResources().getStringArray(R.array.newYear);
-        addHolidayInfo(valueList,newyearData,newyearStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime newyearEnd = getNewyear(end.getYear());
-            addHolidayInfo(valueList,newyearData,newyearEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,newyearData,getNewyear(year),start,end);
         }
     }
 
     public void addBoxingDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime boxingDayStart = getBoxingDay(start.getYear());
         String[] boxingDayData = getContext().getResources().getStringArray(R.array.boxingDay);
-        addHolidayInfo(valueList,boxingDayData,boxingDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime boxingDayEnd = getBoxingDay(end.getYear());
-            addHolidayInfo(valueList,boxingDayData,boxingDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,boxingDayData,getBoxingDay(year),start,end);
         }
     }
 
     public void addGoodFriday(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime goodFridayStart = getEasterDate(start.getYear()).minusDays(2);
         String[] goodFridayData = getContext().getResources().getStringArray(R.array.goodFriday);
-
-        addHolidayInfo(valueList,goodFridayData,goodFridayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime goodFridayEnd = getEasterDate(end.getYear()).minusDays(2);
-            addHolidayInfo(valueList,goodFridayData,goodFridayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,goodFridayData,getEasterDate(year).minusDays(2),start,end);
         }
     }
 
@@ -136,5 +124,13 @@ public abstract class CommonNlwGenerator {
 
     public DateTime getBoxingDay(int year){
         return new DateTime(year, DateTimeConstants.DECEMBER,26,0,0);
+    }
+
+    public Set<Integer> getYears(DateTime start, DateTime end){
+        Set<Integer> years = new HashSet<>();
+        for(int i=start.getYear();i<=end.getYear();i++){
+            years.add(i);
+        }
+        return years;
     }
 }

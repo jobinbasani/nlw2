@@ -37,102 +37,67 @@ public class CanadaNlwGenerator extends CommonNlwGenerator implements NlwGenerat
     }
 
     public void addFamilyDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime familyDayStart = getFamilyDay(start.getYear(),false);
-        DateTime familyDayBCStart = getFamilyDay(start.getYear(),true);
         String[] familyDayData = getContext().getResources().getStringArray(R.array.familyDay);
         String[] familyDayBCData = getContext().getResources().getStringArray(R.array.familyDayBC);
-        addHolidayInfo(valueList,familyDayData,familyDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime familyDayEnd = getFamilyDay(end.getYear(),false);
-            addHolidayInfo(valueList,familyDayData,familyDayEnd,start,end);
-        }
-
-        addHolidayInfo(valueList,familyDayBCData,familyDayBCStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime familyDayBCEnd = getFamilyDay(end.getYear(),true);
-            addHolidayInfo(valueList,familyDayBCData,familyDayBCEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,familyDayData,getFamilyDay(year,false),start,end);
+            addHolidayInfo(valueList,familyDayBCData,getFamilyDay(year,true),start,end);
         }
     }
 
     public void addBoxingDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime boxingDayStart = getBoxingDay(start.getYear());
         String[] boxingDayData = getContext().getResources().getStringArray(R.array.boxingDayCanada);
-        addHolidayInfo(valueList,boxingDayData,boxingDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime boxingDayEnd = getBoxingDay(end.getYear());
-            addHolidayInfo(valueList,boxingDayData,boxingDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,boxingDayData,getBoxingDay(year),start,end);
         }
     }
 
     public void addRemembranceDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime remembranceDayStart = getRemembranceDay(start.getYear());
         String[] remembranceDayData = getContext().getResources().getStringArray(R.array.remembranceDay);
-
-        addHolidayInfo(valueList,remembranceDayData,remembranceDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime remembranceDayEnd = getRemembranceDay(end.getYear());
-            addHolidayInfo(valueList,remembranceDayData,remembranceDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,remembranceDayData,getRemembranceDay(year),start,end);
         }
     }
 
     public void addThanksgiving(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime thanksgivingStart = getThanksgiving(start.getYear());
         String[] thanksgivingData = getContext().getResources().getStringArray(R.array.thanksgivingCanada);
-        addHolidayInfo(valueList,thanksgivingData,thanksgivingStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime thanksgivingEnd = getThanksgiving(end.getYear());
-            addHolidayInfo(valueList,thanksgivingData,thanksgivingEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,thanksgivingData,getThanksgiving(year),start,end);
         }
     }
 
     public void addLabourDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime labourDayStart = getLabourDay(start.getYear());
         String[] labourDayData = getContext().getResources().getStringArray(R.array.labourDayCanada);
-        addHolidayInfo(valueList,labourDayData,labourDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime labourDayEnd = getLabourDay(end.getYear());
-            addHolidayInfo(valueList,labourDayData,labourDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,labourDayData,getLabourDay(year),start,end);
         }
     }
 
     public void addCivicHoliday(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime civicHolidayStart = getCivicHoliday(start.getYear());
         String[] civicHolidayData = getContext().getResources().getStringArray(R.array.civicHoliday);
-        addHolidayInfo(valueList,civicHolidayData,civicHolidayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime civicHolidayEnd = getCivicHoliday(end.getYear());
-            addHolidayInfo(valueList,civicHolidayData,civicHolidayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,civicHolidayData,getCivicHoliday(year),start,end);
         }
     }
 
     public void addCanadaDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime canadaDayStart = getCanadaDay(start.getYear());
         String[] canadaDayData = getContext().getResources().getStringArray(R.array.canadaDay);
-        addHolidayInfo(valueList,canadaDayData,canadaDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime canadaDayEnd = getCanadaDay(end.getYear());
-            addHolidayInfo(valueList,canadaDayData,canadaDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,canadaDayData,getCanadaDay(year),start,end);
         }
     }
 
     public void addVictoriaDay(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime victoriaDayStart = getVictoriaDay(start.getYear());
         String[] victoriaDayData = getContext().getResources().getStringArray(R.array.victoriaDay);
-        addHolidayInfo(valueList,victoriaDayData,victoriaDayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime victoriaDayEnd = getVictoriaDay(end.getYear());
-            addHolidayInfo(valueList,victoriaDayData,victoriaDayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,victoriaDayData,getVictoriaDay(year),start,end);
         }
     }
 
     public void addEasterMonday(List<ContentValues> valueList, DateTime start, DateTime end){
-        DateTime easterMondayStart = getEasterDate(start.getYear()).plusDays(1);
         String[] easterMondayData = getContext().getResources().getStringArray(R.array.easterMondayCanada);
-
-        addHolidayInfo(valueList,easterMondayData,easterMondayStart,start,end);
-        if(start.getYear()!=end.getYear()){
-            DateTime easterMondayEnd = getEasterDate(end.getYear()).plusDays(1);
-            addHolidayInfo(valueList,easterMondayData,easterMondayEnd,start,end);
+        for(Integer year:getYears(start,end)){
+            addHolidayInfo(valueList,easterMondayData,getEasterDate(year).plusDays(1),start,end);
         }
     }
 
