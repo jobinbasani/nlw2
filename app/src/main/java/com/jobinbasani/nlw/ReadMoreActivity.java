@@ -1,37 +1,38 @@
 package com.jobinbasani.nlw;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.jobinbasani.nlw.util.NlwUtil;
-
-import android.net.Uri;
-import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.net.Uri;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.analytics.tracking.android.EasyTracker;
+import com.jobinbasani.nlw.util.NlwUtil;
 
 public class ReadMoreActivity extends Activity {
 	
 	private WebView webView;
 	final Activity activity = this;
+    private ProgressBar progressBar;
 	
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getWindow().requestFeature(Window.FEATURE_PROGRESS);
 		setContentView(R.layout.activity_read_more);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
-		Intent readMoreIntent = getIntent();
-		String url = readMoreIntent.getStringExtra(NlwUtil.URL_KEY);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.bgGreenColor), PorterDuff.Mode.SRC_IN);
+		String url = getIntent().getStringExtra(NlwUtil.URL_KEY);
 		webView = (WebView) findViewById(R.id.webView);
 		
 		webView.getSettings().setSupportZoom(true);
@@ -40,12 +41,11 @@ public class ReadMoreActivity extends Activity {
 
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
-				
-				activity.setTitle(getResources().getString(R.string.loadingText));
-				activity.setProgress(newProgress * 100);
-				if(newProgress > 80){
-					activity.setTitle(getResources().getString(R.string.title_activity_read_more));
-				}
+                try{
+                    progressBar.setProgress(newProgress);
+                }catch(Exception e){
+
+                }
 			}
 			
 		});

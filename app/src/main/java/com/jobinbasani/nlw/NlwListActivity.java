@@ -6,8 +6,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jobinbasani.nlw.adapters.NlwTabAdapter;
