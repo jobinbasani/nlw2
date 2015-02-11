@@ -1,11 +1,12 @@
 package com.jobinbasani.nlw;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.FragmentTransaction;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jobinbasani.nlw.adapters.NlwTabAdapter;
@@ -13,7 +14,7 @@ import com.jobinbasani.nlw.fragments.WeekendList;
 import com.jobinbasani.nlw.util.NlwUtil;
 
 
-public class NlwListActivity extends Activity implements ActionBar.TabListener, WeekendList.OnFragmentInteractionListener {
+public class NlwListActivity extends ActionBarActivity implements ActionBar.TabListener, WeekendList.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -40,9 +41,10 @@ public class NlwListActivity extends Activity implements ActionBar.TabListener, 
         currentDateNumber = NlwUtil.getCurrentDateNumber(this);
         setTitle(country+" Weekends");
         // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.lightGreen)));
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
+        
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new NlwTabAdapter(getFragmentManager(),this);

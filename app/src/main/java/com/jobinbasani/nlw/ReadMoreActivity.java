@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jobinbasani.nlw.util.NlwUtil;
 
-public class ReadMoreActivity extends Activity {
+public class ReadMoreActivity extends ActionBarActivity {
 	
 	private WebView webView;
 	final Activity activity = this;
@@ -85,7 +86,7 @@ public class ReadMoreActivity extends Activity {
 	 */
 	private void setupActionBar() {
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
 

@@ -1,15 +1,14 @@
 package com.jobinbasani.nlw;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,9 +26,7 @@ import com.jobinbasani.nlw.util.NlwUtil;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import java.util.List;
-
-public class MainActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	SharedPreferences prefs;
 	final public static String COUNTRY_KEY = "country";
@@ -65,8 +62,6 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-		MenuItem shareItem = menu.findItem(R.id.shareMenuItem);
-		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -127,28 +122,17 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 	private void sendFeedback(){
 		Intent emailIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:"+getResources().getString(R.string.feedbackEmail)+"?subject="+Uri.encode(getResources().getString(R.string.feedbackSubject))));
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.feedbackSubject));
-		
-		List<ResolveInfo> activities = getPackageManager().queryIntentActivities(emailIntent, 0);
-		//To prevent Receiver leak bug when only application is available for Intent
-		if (activities.size() > 1) {
-		    // Create and start the chooser
-		    Intent chooser = Intent.createChooser(emailIntent, getResources().getString(R.string.feedbackIntentTitle));
-		    startActivity(chooser);
-
-		  } else {
-		    startActivity( emailIntent );
-		}
+        startActivity( Intent.createChooser(emailIntent, getResources().getString(R.string.feedbackIntentTitle)) );
 	}
 	
 	private void shareNlwDetails(){
-		if(mShareActionProvider != null){
-			TextView holidayText = (TextView)findViewById(R.id.nlwHolidayText);
-			TextView holidayDetails = (TextView) findViewById(R.id.holidayDetails);
-			TextView holidayDate = (TextView) findViewById(R.id.nlwDateText);
-			TextView holidayMonth = (TextView) findViewById(R.id.monthYearText);
-			String[] holidayMonthArray = holidayMonth.getText().toString().split(" ");
-			mShareActionProvider.setShareIntent(NlwUtil.getShareDataIntent(holidayText.getText()+" on "+holidayMonthArray[0]+" "+holidayDate.getText()+", "+holidayMonthArray[1]+" - "+holidayDetails.getText()+". "+getResources().getString(R.string.readMoreAt)+" "+readMoreLink));
-		}
+        TextView holidayText = (TextView)findViewById(R.id.nlwHolidayText);
+        TextView holidayDetails = (TextView) findViewById(R.id.holidayDetails);
+        TextView holidayDate = (TextView) findViewById(R.id.nlwDateText);
+        TextView holidayMonth = (TextView) findViewById(R.id.monthYearText);
+        String[] holidayMonthArray = holidayMonth.getText().toString().split(" ");
+        Intent shareIntent = NlwUtil.getShareDataIntent(holidayText.getText()+" on "+holidayMonthArray[0]+" "+holidayDate.getText()+", "+holidayMonthArray[1]+" - "+holidayDetails.getText()+". "+getResources().getString(R.string.readMoreAt)+" "+readMoreLink);
+        startActivity( Intent.createChooser(shareIntent, getResources().getString(R.string.feedbackIntentTitle)) );
 	}
 
     private void loadData(Bundle args){
