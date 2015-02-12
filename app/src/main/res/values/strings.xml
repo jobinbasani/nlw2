@@ -32,8 +32,8 @@
     <string name="title_activity_nlw_list">NlwListActivity</string>
     <string name="title_section1">Upcoming</string>
     <string name="title_section2">Past</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="rateApp">Rate App</string>
+    <string name="playStore">com.android.vending</string>
 
     <string-array name="countryArray">
         <item>Australia</item>

@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/monthYearText"
         android:layout_centerHorizontal="true"
-        android:background="@layout/circle"
+        android:background="@layout/squareshape"
         android:gravity="center"
         android:height="@dimen/nlwCircleRadius"
         android:padding="@dimen/nlwPadding"

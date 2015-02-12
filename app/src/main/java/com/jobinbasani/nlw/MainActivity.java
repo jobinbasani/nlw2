@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ShareActionProvider;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -33,7 +32,6 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 	final public static String LAST_CHECKED = "lastChecked";
 	private int nlwDateNumber;
 	private String readMoreLink;
-	private ShareActionProvider mShareActionProvider;
     private static final int LOADER_ID = 1;
     private boolean isLoading = false;
 
@@ -64,6 +62,12 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 		getMenuInflater().inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_main_rate_app).setVisible(NlwUtil.showRateApp(this));
+        return super.onPrepareOptionsMenu(menu);
+    }
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -79,6 +83,9 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 		case R.id.shareMenuItem:
 			shareNlwDetails();
 			break;
+        case R.id.action_main_rate_app:
+            startActivity(NlwUtil.getPlaystoreListing(getPackageName()));
+            break;
 		
 		}
 		
@@ -210,10 +217,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 			holidayText.setText(holiday);
 			holidayDetails.setText(holidayDetailText);
 			daysToGoText.setText(getResources().getQuantityString(R.plurals.daysRemaining, dateDiff, dateDiff));
-			if(mShareActionProvider!=null){
-				mShareActionProvider.setShareIntent(NlwUtil.getShareDataIntent(holiday+" on "+monthName+" "+date+", "+year+" - "+holidayDetailText+". "+getResources().getString(R.string.readMoreAt)+" "+readMoreLink));
-			}
-			
+
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(LAST_CHECKED, currentDateNumber);
 			editor.commit();

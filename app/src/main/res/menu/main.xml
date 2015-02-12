@@ -2,4 +2,5 @@
     <item android:id="@+id/shareMenuItem" app:showAsAction="ifRoom" android:title="@string/shareAction" android:orderInCategory="100"></item>
     <item android:id="@+id/eventMenuItem" app:showAsAction="never" android:title="@string/addEventAction" android:orderInCategory="200"></item>
     <item android:id="@+id/feedbackMenuItem" app:showAsAction="never" android:title="@string/feedbackAction" android:orderInCategory="300"></item>
+    <item android:id="@+id/action_main_rate_app" android:title="@string/rateApp" app:showAsAction="never" android:orderInCategory="400"></item>
 </menu>
