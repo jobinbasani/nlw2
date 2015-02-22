@@ -39,7 +39,6 @@ public class NlwProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        System.out.println("begin adding "+values.length);
         int rowsAdded = 0;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -97,10 +96,12 @@ public class NlwProvider extends ContentProvider {
                         .append(" DESC ")
                         .toString(), selectionArgs);
             case NLW_STATS:
-                return dbHelper.getReadableDatabase().rawQuery("select maxdata.country,maxdata.date,countdata.count from (select max(date) as date, " +
-                        "country from nlwentry group by country) maxdata " +
-                        "left join (select count(*)as count,country as c_country from nlwentry where date>? group by country) countdata " +
-                        "on maxdata.country=countdata.c_country",selectionArgs);
+                return dbHelper.getReadableDatabase().rawQuery(new StringBuilder()
+                        .append("select maxdata.country,maxdata.date,countdata.count from (select max(date) as date, ")
+                        .append("country from nlwentry group by country) maxdata ")
+                        .append("left join (select count(*)as count,country as c_country from nlwentry where date>? group by country) countdata ")
+                        .append("on maxdata.country=countdata.c_country")
+                        .toString(),selectionArgs);
         }
 
         return null;
@@ -118,7 +119,7 @@ public class NlwProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return dbHelper.getWritableDatabase().delete(NlwDataContract.NlwDataEntry.TABLE_NAME,"date<?",selectionArgs);
+        return dbHelper.getWritableDatabase().delete(NlwDataContract.NlwDataEntry.TABLE_NAME, "date<?", selectionArgs);
     }
 
     @Override

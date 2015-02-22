@@ -40,7 +40,6 @@ public class NlwService extends IntentService {
         if(cursor!=null){
             List<ContentValues> valueList = new ArrayList<>();
             while (cursor.moveToNext()){
-                System.out.println(cursor.getString(cursor.getColumnIndex("country")));
                 int remainingCount = cursor.getInt(cursor.getColumnIndex("count"));
                 if(remainingCount<=NlwConstants.MIN_ENTRIES){
                     if(remainingCount==0)refreshData = true;
