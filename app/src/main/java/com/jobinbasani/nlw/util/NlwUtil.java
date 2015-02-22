@@ -8,6 +8,7 @@ import android.provider.CalendarContract.Events;
 
 import com.jobinbasani.nlw.R;
 import com.jobinbasani.nlw.ReadMoreActivity;
+import com.jobinbasani.nlw.constants.NlwConstants;
 import com.jobinbasani.nlw.generators.AustraliaNlwGenerator;
 import com.jobinbasani.nlw.generators.CanadaNlwGenerator;
 import com.jobinbasani.nlw.generators.NlwGeneratorI;
@@ -23,9 +24,6 @@ import java.util.List;
 
 public class NlwUtil {
 	
-	public static final String URL_KEY = "url";
-    public static final String NLW_UPLOAD = "nlwupload";
-
 	public static int getDateNumber(Context context, DateTime dateTime){
         if(dateTime==null)dateTime = new DateTime();
 		return Integer.parseInt(dateTime.toString(context.getResources().getString(R.string.dateFormat)));
@@ -58,7 +56,7 @@ public class NlwUtil {
 	
 	public static Intent getReadMoreIntent(Context context, String url){
 		Intent readMoreIntent = new Intent(context,ReadMoreActivity.class);
-		readMoreIntent.putExtra(URL_KEY, url);
+		readMoreIntent.putExtra(NlwConstants.URL_KEY, url);
 		return readMoreIntent;
 	}
 	

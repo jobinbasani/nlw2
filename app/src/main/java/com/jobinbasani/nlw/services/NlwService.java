@@ -62,7 +62,7 @@ public class NlwService extends IntentService {
         }
         getContentResolver().delete(NlwDataContract.CONTENT_URI,null,new String[]{deletionDatetime});
         
-        Intent nlwIntent = new Intent(NlwUtil.NLW_UPLOAD);
+        Intent nlwIntent = new Intent(NlwConstants.NLW_UPLOAD);
         nlwIntent.putExtra(NlwConstants.NLW_RELOAD, refreshData);
         LocalBroadcastManager.getInstance(this).sendBroadcast(nlwIntent);
         NlwReceiver.completeWakefulIntent(intent);

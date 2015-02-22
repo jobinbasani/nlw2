@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 	@Override
 	protected void onStart() {
 		super.onStart();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(NlwUtil.NLW_UPLOAD));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(NlwConstants.NLW_UPLOAD));
 		EasyTracker.getInstance(this).activityStart(this);
 		checkLastLoaded();
 	}

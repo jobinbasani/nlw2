@@ -8,4 +8,6 @@ public class NlwConstants {
     public static final int MIN_ENTRIES = 8;
     public static final String COUNTRY_KEY = "country";
     public static final String LAST_CHECKED = "lastChecked";
+    public static final String URL_KEY = "url";
+    public static final String NLW_UPLOAD = "nlwupload";
 }

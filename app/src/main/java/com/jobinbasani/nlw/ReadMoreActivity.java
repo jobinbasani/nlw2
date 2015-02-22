@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
-import com.jobinbasani.nlw.util.NlwUtil;
+import com.jobinbasani.nlw.constants.NlwConstants;
 
 public class ReadMoreActivity extends ActionBarActivity {
 	
@@ -33,7 +33,7 @@ public class ReadMoreActivity extends ActionBarActivity {
 		setupActionBar();
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.bgGreenColor), PorterDuff.Mode.SRC_IN);
-		String url = getIntent().getStringExtra(NlwUtil.URL_KEY);
+		String url = getIntent().getStringExtra(NlwConstants.URL_KEY);
 		webView = (WebView) findViewById(R.id.webView);
 		
 		webView.getSettings().setSupportZoom(true);
