@@ -11,10 +11,12 @@ public final class NlwDataContract  {
     public static final String NLW = "nlw";
     public static final String NLW_LIST = "nlwlist";
     public static final String NLW_LIST_PAST = "nlwlistPast";
+    public static final String NLW_STATS = "nlwstats";
     public static final Uri CONTENT_URI = Uri.parse("content://"+AUTHORITY+"/");
     public static final Uri CONTENT_URI_NLW = Uri.withAppendedPath(CONTENT_URI, NLW);
     public static final Uri CONTENT_URI_NLW_LIST = Uri.withAppendedPath(CONTENT_URI, NLW_LIST);
     public static final Uri CONTENT_URI_NLW_LIST_PAST = Uri.withAppendedPath(CONTENT_URI, NLW_LIST_PAST);
+    public static final Uri CONTENT_URI_NLW_STATS = Uri.withAppendedPath(CONTENT_URI,NLW_STATS);
 
 	public static abstract class NlwDataEntry implements BaseColumns {
         public static final String TABLE_NAME = "nlwentry";

@@ -1,13 +1,17 @@
 package com.jobinbasani.nlw;
 
 import android.app.LoaderManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +22,8 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.jobinbasani.nlw.constants.NlwConstants;
+import com.jobinbasani.nlw.receivers.NlwReceiver;
 import com.jobinbasani.nlw.sql.NlwDataContract;
 import com.jobinbasani.nlw.sql.NlwDataContract.NlwDataEntry;
 import com.jobinbasani.nlw.util.NlwUtil;
@@ -28,18 +34,19 @@ import org.joda.time.Days;
 public class MainActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	SharedPreferences prefs;
-	final public static String COUNTRY_KEY = "country";
-	final public static String LAST_CHECKED = "lastChecked";
+
 	private int nlwDateNumber;
 	private String readMoreLink;
     private static final int LOADER_ID = 1;
-    private boolean isLoading = false;
+    private volatile boolean isLoading = false;
+    private BroadcastReceiver mReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
         prefs = getPreferences(MODE_PRIVATE);
+        setReceiver();
         launchTasks();
         loadData(null);
     }
@@ -47,6 +54,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 	@Override
 	protected void onStart() {
 		super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(NlwUtil.NLW_UPLOAD));
 		EasyTracker.getInstance(this).activityStart(this);
 		checkLastLoaded();
 	}
@@ -54,6 +62,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 	@Override
 	protected void onStop() {
 		super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
 		EasyTracker.getInstance(this).activityStop(this);
 	}
 
@@ -93,14 +102,31 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 	}
 
 	private void checkLastLoaded(){
-        int lastDate = prefs.getInt(LAST_CHECKED, 0);
-		if(lastDate>0 && (lastDate!=NlwUtil.getCurrentDateNumber(this))){
+        int lastDate = prefs.getInt(NlwConstants.LAST_CHECKED, 0);
+		if(lastDate>0 && (lastDate!=NlwUtil.getDateNumber(this, null))){
             loadData(null);
+            updateDatabase();
 		}
 	}
+    
+    private void updateDatabase(){
+        Intent nlwIntent = new Intent(this, NlwReceiver.class);
+        sendBroadcast(nlwIntent);
+    }
+    
+    private void setReceiver(){
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getBooleanExtra(NlwConstants.NLW_RELOAD,false)){
+                    loadData(null);
+                }
+            }
+        };
+    }
 	
 	private void loadPreferences(){
-		String defaultCountry = prefs.getString(COUNTRY_KEY, "USA");
+		String defaultCountry = prefs.getString(NlwConstants.COUNTRY_KEY, "USA");
 		Spinner countrySpinner = (Spinner) findViewById(R.id.countrySelector);
 		SpinnerAdapter countryArray = countrySpinner.getAdapter();
 		int position = -1;
@@ -139,7 +165,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         TextView holidayMonth = (TextView) findViewById(R.id.monthYearText);
         String[] holidayMonthArray = holidayMonth.getText().toString().split(" ");
         Intent shareIntent = NlwUtil.getShareDataIntent(holidayText.getText()+" on "+holidayMonthArray[0]+" "+holidayDate.getText()+", "+holidayMonthArray[1]+" - "+holidayDetails.getText()+". "+getResources().getString(R.string.readMoreAt)+" "+readMoreLink);
-        startActivity( Intent.createChooser(shareIntent, getResources().getString(R.string.feedbackIntentTitle)) );
+        startActivity( Intent.createChooser(shareIntent, getResources().getString(R.string.shareAction)) );
 	}
 
     private void loadData(Bundle args){
@@ -162,7 +188,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 	public void onViewAll(View view){
 		Intent viewAllIntent = new Intent(this, NlwListActivity.class);
 		Spinner countrySpinner = (Spinner) findViewById(R.id.countrySelector);
-		viewAllIntent.putExtra(COUNTRY_KEY, countrySpinner.getSelectedItem().toString());
+		viewAllIntent.putExtra(NlwConstants.COUNTRY_KEY, countrySpinner.getSelectedItem().toString());
 		startActivity(viewAllIntent);
 	}
 	
@@ -174,7 +200,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int pos, long id) {
 				SharedPreferences.Editor editor = prefs.edit();
-				editor.putString(COUNTRY_KEY, countrySpinner.getSelectedItem().toString());
+				editor.putString(NlwConstants.COUNTRY_KEY, countrySpinner.getSelectedItem().toString());
 				editor.commit();
 				loadData(null);
 			}
@@ -199,7 +225,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 		TextView nlwDateText = (TextView) findViewById(R.id.nlwDateText);
 		TextView holidayDetails = (TextView) findViewById(R.id.holidayDetails);
 		TextView daysToGoText = (TextView) findViewById(R.id.daysToGo);
-		int currentDateNumber = NlwUtil.getCurrentDateNumber(this);
+		int currentDateNumber = NlwUtil.getDateNumber(this, null);
         data.moveToFirst();
 		if(data.getCount()>0){
 			nlwDateNumber = data.getInt(data.getColumnIndexOrThrow(NlwDataEntry.COLUMN_NAME_NLWDATE));
@@ -219,7 +245,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 			daysToGoText.setText(getResources().getQuantityString(R.plurals.daysRemaining, dateDiff, dateDiff));
 
 			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(LAST_CHECKED, currentDateNumber);
+			editor.putInt(NlwConstants.LAST_CHECKED, currentDateNumber);
 			editor.commit();
 			
 		}
@@ -229,7 +255,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Spinner countrySelector = (Spinner) findViewById(R.id.countrySelector);
         String selectedCountry = countrySelector.getSelectedItem().toString();
-        String[] selectionArgs = new String[]{NlwUtil.getCurrentDateNumber(this)+"", selectedCountry};
+        String[] selectionArgs = new String[]{NlwUtil.getDateNumber(this, null)+"", selectedCountry};
         return new CursorLoader(MainActivity.this, NlwDataContract.CONTENT_URI_NLW,null,null,selectionArgs,null);
     }
 

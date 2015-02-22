@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.google.analytics.tracking.android.EasyTracker;
 import com.jobinbasani.nlw.adapters.NlwTabAdapter;
+import com.jobinbasani.nlw.constants.NlwConstants;
 import com.jobinbasani.nlw.fragments.WeekendList;
 import com.jobinbasani.nlw.util.NlwUtil;
 
@@ -37,8 +38,8 @@ public class NlwListActivity extends ActionBarActivity implements ActionBar.TabL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nlw_list);
-        country = getIntent().getStringExtra(MainActivity.COUNTRY_KEY);
-        currentDateNumber = NlwUtil.getCurrentDateNumber(this);
+        country = getIntent().getStringExtra(NlwConstants.COUNTRY_KEY);
+        currentDateNumber = NlwUtil.getDateNumber(this, null);
         setTitle(country+" Weekends");
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();

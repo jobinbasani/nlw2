@@ -24,15 +24,17 @@ import java.util.List;
 public class NlwUtil {
 	
 	public static final String URL_KEY = "url";
+    public static final String NLW_UPLOAD = "nlwupload";
 
-	public static int getCurrentDateNumber(Context context){
-		return Integer.parseInt(new DateTime().toString(context.getResources().getString(R.string.dateFormat)));
+	public static int getDateNumber(Context context, DateTime dateTime){
+        if(dateTime==null)dateTime = new DateTime();
+		return Integer.parseInt(dateTime.toString(context.getResources().getString(R.string.dateFormat)));
 	}
 	
     public static DateTime getDateTimeFromNumber(Context context, int number){
         return DateTimeFormat.forPattern(context.getResources().getString(R.string.dateFormat)).parseDateTime(number+"");
     }
-	
+
 	public static Intent getOpenCalendarIntent(Context context, int nlwDateNumber){
         DateTime nlwDate = getDateTimeFromNumber(context, nlwDateNumber);
 		Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
@@ -75,6 +77,21 @@ public class NlwUtil {
         generatorList.add(new UkNlwGenerator(context));
         generatorList.add(new UsaNlwGenerator(context));
         return generatorList;
+    }
+    
+    public static NlwGeneratorI getGenerator(Context context, String country){
+        switch (country.toUpperCase()){
+            case "USA":
+                return new UsaNlwGenerator(context);
+            case "UK":
+                return new UkNlwGenerator(context);
+            case "AUSTRALIA":
+                return new AustraliaNlwGenerator(context);
+            case "CANADA":
+                return new CanadaNlwGenerator(context);
+            default:
+                return null;
+        }
     }
 
     public static boolean showRateApp(Context context){

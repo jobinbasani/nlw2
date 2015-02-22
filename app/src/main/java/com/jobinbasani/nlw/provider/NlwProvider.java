@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.jobinbasani.nlw.sql.NlwDataContract;
@@ -20,18 +21,40 @@ public class NlwProvider extends ContentProvider {
     private static final int NLW = 1;
     private static final int NLW_LIST = 2;
     private static final int NLW_LIST_PAST = 3;
+    private static final int NLW_STATS = 4;
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URI_MATCHER.addURI(NlwDataContract.AUTHORITY,NlwDataContract.NLW,NLW);
         URI_MATCHER.addURI(NlwDataContract.AUTHORITY,NlwDataContract.NLW_LIST,NLW_LIST);
         URI_MATCHER.addURI(NlwDataContract.AUTHORITY,NlwDataContract.NLW_LIST_PAST,NLW_LIST_PAST);
+        URI_MATCHER.addURI(NlwDataContract.AUTHORITY,NlwDataContract.NLW_STATS,NLW_STATS);
     }
 
     @Override
     public boolean onCreate() {
         dbHelper = new NlwDataDbHelper(getContext());
         return true;
+    }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        System.out.println("begin adding "+values.length);
+        int rowsAdded = 0;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        try{
+            for(ContentValues value:values){
+                db.insert(NlwDataContract.NlwDataEntry.TABLE_NAME, null, value);
+                rowsAdded++;
+            }
+            db.setTransactionSuccessful();
+        }catch(Exception e){
+
+        }finally{
+            db.endTransaction();
+        }
+        return rowsAdded;
     }
 
     @Override
@@ -73,6 +96,11 @@ public class NlwProvider extends ContentProvider {
                         .append(NlwDataContract.NlwDataEntry.COLUMN_NAME_NLWDATE)
                         .append(" DESC ")
                         .toString(), selectionArgs);
+            case NLW_STATS:
+                return dbHelper.getReadableDatabase().rawQuery("select maxdata.country,maxdata.date,countdata.count from (select max(date) as date, " +
+                        "country from nlwentry group by country) maxdata " +
+                        "left join (select count(*)as count,country as c_country from nlwentry where date>? group by country) countdata " +
+                        "on maxdata.country=countdata.c_country",selectionArgs);
         }
 
         return null;
@@ -90,7 +118,7 @@ public class NlwProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        return dbHelper.getWritableDatabase().delete(NlwDataContract.NlwDataEntry.TABLE_NAME,"date<?",selectionArgs);
     }
 
     @Override
